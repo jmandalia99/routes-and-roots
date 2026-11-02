@@ -8,154 +8,124 @@
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9VRVWW9YJ"></script>
 <script>(function(){var ID='G-P9VRVWW9YJ';try{if(localStorage.getItem('jm_owner')==='1')window['ga-disable-'+ID]=true;}catch(e){}window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config',ID);})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Yatra+One&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+:root{
+  --m9:#2E070C; --m8:#3E0A10; --m7:#6B0F1A; --red:#C1121F; --gold:#D4A537; --gold-hi:#F3C969; --cream:#FFF4DF;
+  --peacock:#0B4F4A; --teal:#5FD3C6; --line:rgba(243,201,105,.22); --muted:rgba(255,244,223,.68);
+  --disp:'Cormorant Garamond',Georgia,serif; --body:'DM Sans',system-ui,sans-serif; --deva:'Tiro Devanagari Sanskrit',serif;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100vw;height:100vh;overflow:hidden;background:#08050f;color:#fdf6e3;font-family:'DM Sans',sans-serif}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--m9);color:var(--cream);font-family:var(--body);font-size:15px}
+a{color:inherit}
 
 #cam{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);opacity:0;transition:opacity 1.2s;z-index:0}
 #cam.live{opacity:1}
-#grade{position:fixed;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,rgba(245,166,35,0.06) 0%,transparent 20%,transparent 72%,rgba(8,5,15,0.7) 100%)}
+#grade{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(46,7,12,.55) 0%,transparent 18%,transparent 70%,rgba(46,7,12,.75) 100%)}
 #cv{position:fixed;inset:0;width:100%;height:100%;z-index:10}
 
-/* ── TOP BAR ── */
-#topbar{position:fixed;top:0;left:0;right:0;z-index:40;pointer-events:none;
-  display:flex;justify-content:space-between;align-items:flex-start;padding:20px 32px 0}
-#logo{font-family:'Yatra One',cursive;font-size:1.7rem;color:#f5a623;
-  letter-spacing:.1em;text-shadow:0 0 30px rgba(245,166,35,0.4);line-height:1}
-#logoSub{font-size:.42rem;letter-spacing:.4em;color:rgba(245,166,35,0.35);text-transform:uppercase;margin-top:3px}
-#statusArea{text-align:right;font-size:.48rem;letter-spacing:.14em;color:rgba(253,246,227,0.3);line-height:2.3}
-.dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#1a0f00;margin-left:6px;vertical-align:middle;transition:all .4s}
-.dot.on{background:#f5a623;box-shadow:0 0 7px #f5a623}
-.dot.gr{background:#22c55e;box-shadow:0 0 7px #22c55e}
-.dot.tl{background:#00b4a6;box-shadow:0 0 7px #00b4a6}
+/* top bar */
+#topbar{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 22px}
+#logo{font-family:var(--disp);font-size:26px;font-weight:600;line-height:1}
+#logo em{font-style:italic;color:var(--gold-hi)}
+#logoSub{font-size:12.5px;color:var(--muted);margin-top:3px}
+#logoSub a{color:var(--gold-hi);text-decoration:none}
+#statusArea{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;font-size:12px;font-weight:600}
+#statusArea>div{display:flex;align-items:center;gap:6px;background:rgba(46,7,12,.7);padding:6px 10px;border-radius:999px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:rgba(255,244,223,.25);transition:all .3s}
+.dot.on{background:var(--gold-hi)}
+.dot.gr{background:#7BE495}
+.dot.tl{background:var(--teal)}
 
-/* ── HASTA DISPLAY PANEL — right side ── */
-#hastaPanel{
-  position:fixed;right:0;top:0;bottom:0;width:300px;z-index:40;pointer-events:none;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:90px 28px 60px;
-  background:linear-gradient(270deg,rgba(8,5,15,0.93) 55%,transparent 100%);
-  opacity:0;transition:opacity .5s;
-}
+/* recognised hasta */
+#hastaPanel{position:fixed;right:0;top:0;bottom:0;width:320px;z-index:30;pointer-events:none;display:flex;flex-direction:column;justify-content:center;padding:90px 28px 70px;
+  background:linear-gradient(270deg,rgba(46,7,12,.94) 60%,transparent 100%);opacity:0;transition:opacity .4s}
 #hastaPanel.show{opacity:1}
-#hastaTypeLabel{font-size:.44rem;letter-spacing:.38em;text-transform:uppercase;
-  color:rgba(245,166,35,0.45);margin-bottom:10px}
-#hastaNumber{font-size:.5rem;font-weight:300;letter-spacing:.2em;
-  color:rgba(245,166,35,0.35);margin-bottom:8px}
-#hastaDev{
-  font-family:'Tiro Devanagari Sanskrit',serif;font-size:3rem;line-height:1.2;
-  color:#f5a623;text-shadow:0 0 30px rgba(245,166,35,0.55),0 0 70px rgba(245,166,35,0.2);
-  margin-bottom:6px;animation:glow 3s ease-in-out infinite;
-}
-@keyframes glow{0%,100%{text-shadow:0 0 30px rgba(245,166,35,0.55),0 0 70px rgba(245,166,35,0.2)}
-  50%{text-shadow:0 0 50px rgba(255,160,0,1),0 0 100px rgba(245,166,35,0.45)}}
-#hastaRom{font-size:.95rem;font-weight:400;letter-spacing:.1em;
-  color:rgba(253,246,227,0.75);text-transform:uppercase;margin-bottom:3px}
-#hastaLit{font-family:'Tiro Devanagari Sanskrit',serif;font-style:italic;
-  font-size:.75rem;color:rgba(245,166,35,0.55);margin-bottom:16px}
-#hastaDiv{width:36px;height:1px;
-  background:linear-gradient(90deg,transparent,#f5a623,transparent);margin-bottom:16px;opacity:.5}
-#hastaVin{font-size:.72rem;font-weight:300;color:rgba(253,246,227,0.58);line-height:1.75}
+#hastaTypeLabel{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-hi);margin-bottom:6px}
+#hastaNumber{font-size:13px;color:var(--muted);margin-bottom:10px}
+#hastaDev{font-family:var(--deva);font-size:52px;line-height:1.15;color:var(--gold-hi);margin-bottom:4px}
+#hastaRom{font-family:var(--disp);font-size:30px;font-weight:600;color:var(--cream);line-height:1.1}
+#hastaLit{font-size:14px;font-style:italic;color:var(--muted);margin:4px 0 14px}
+#hastaDiv{width:40px;height:2px;background:var(--gold);margin-bottom:14px}
+#hastaVin{font-size:15px;color:rgba(255,244,223,.86);line-height:1.6}
+#confBar{margin-top:18px}
+#confLabel{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px}
+#confTrack{height:5px;background:rgba(243,201,105,.16);border-radius:5px;overflow:hidden}
+#confFill{height:100%;background:var(--gold-hi);border-radius:5px;transition:width .3s}
+#confPct{font-size:13px;font-weight:600;color:var(--gold-hi);margin-top:5px}
 
-/* confidence bar */
-#confBar{margin-top:14px}
-#confLabel{font-size:.44rem;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(245,166,35,0.35);margin-bottom:5px}
-#confTrack{height:2px;background:rgba(245,166,35,0.12);border-radius:2px;overflow:hidden}
-#confFill{height:100%;background:linear-gradient(90deg,#f5a623,#e8510a);border-radius:2px;transition:width .3s}
-#confPct{font-size:.55rem;color:rgba(245,166,35,0.5);margin-top:4px}
+#modePill{position:fixed;left:22px;bottom:22px;z-index:40;pointer-events:none;font-size:13.5px;font-weight:600;padding:8px 15px;border-radius:999px;background:rgba(46,7,12,.75);border:1px solid var(--line);color:var(--muted);transition:all .4s}
+#modePill.asa{border-color:var(--gold-hi);color:var(--gold-hi)}
+#modePill.sam{border-color:var(--teal);color:var(--teal)}
 
-/* ── MODE PILL ── */
-#modePill{
-  position:fixed;left:28px;bottom:28px;z-index:40;pointer-events:none;
-  font-size:.5rem;letter-spacing:.25em;text-transform:uppercase;
-  padding:6px 14px;border-radius:20px;
-  border:1px solid rgba(245,166,35,0.2);color:rgba(245,166,35,0.5);
-  transition:all .4s;
-}
-#modePill.asa{border-color:rgba(245,166,35,0.5);color:rgba(245,166,35,0.9);background:rgba(245,166,35,0.08)}
-#modePill.sam{border-color:rgba(0,180,166,0.5);color:rgba(0,200,186,0.9);background:rgba(0,180,166,0.08)}
-
-/* ── AWAIT ── */
-#await{position:fixed;inset:0;z-index:20;pointer-events:none;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .8s}
+#await{position:fixed;inset:0;z-index:20;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:opacity .6s;text-align:center;padding:0 24px}
 #await.gone{opacity:0}
-#awaitSym{font-size:3.5rem;opacity:.2;animation:br 3s ease-in-out infinite}
-@keyframes br{0%,100%{opacity:.15;transform:scale(1)}50%{opacity:.3;transform:scale(1.06)}}
-#awaitL1{font-family:'Yatra One',cursive;font-size:1.1rem;letter-spacing:.18em;color:rgba(245,166,35,0.35)}
-#awaitL2{font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(253,246,227,0.2)}
+#awaitSym{font-family:var(--deva);font-size:56px;color:var(--gold-hi);opacity:.9;line-height:1}
+#awaitL1{font-family:var(--disp);font-size:28px;font-weight:600;color:var(--cream)}
+#awaitL2{font-size:14.5px;color:var(--muted)}
 
-/* ── LOAD MODEL PROMPT ── */
-#loadModel{
-  position:fixed;inset:0;z-index:50;background:#08050f;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
-  transition:opacity .8s;
-}
+/* load screen */
+#loadModel{position:fixed;inset:0;z-index:50;overflow:auto;transition:opacity .6s;
+  background:radial-gradient(900px 500px at 80% 10%,rgba(193,18,31,.35),transparent 60%),linear-gradient(160deg,var(--m8),var(--m9))}
 #loadModel.out{opacity:0;pointer-events:none}
-#lmTitle{font-family:'Yatra One',cursive;font-size:3.8rem;color:#f5a623;letter-spacing:.12em;text-shadow:0 0 60px rgba(245,166,35,0.2)}
-#lmSub{font-family:'Tiro Devanagari Sanskrit',serif;font-size:1rem;color:rgba(245,166,35,0.45)}
-#lmInfo{font-size:.5rem;letter-spacing:.3em;color:rgba(245,166,35,0.25);text-transform:uppercase}
-.lbar{width:120px;height:1px;background:rgba(245,166,35,0.1);border-radius:2px;overflow:hidden}
-.lfill{height:100%;background:rgba(245,166,35,0.5);animation:ld 2s ease-in-out infinite}
-@keyframes ld{0%{width:0%;margin-left:0}50%{width:65%}100%{width:0%;margin-left:100%}}
-
-/* Drop zone */
-#dropZone{
-  border:1.5px dashed rgba(245,166,35,0.3);border-radius:8px;
-  padding:28px 40px;text-align:center;cursor:pointer;transition:.2s;
-  background:rgba(245,166,35,0.03);
-}
-#dropZone:hover,#dropZone.drag{border-color:rgba(245,166,35,0.7);background:rgba(245,166,35,0.07)}
-#dropIcon{font-size:2rem;opacity:.4;margin-bottom:8px}
-#dropText{font-size:.68rem;color:rgba(245,166,35,0.5);letter-spacing:.15em}
-#dropSub{font-size:.5rem;color:rgba(245,166,35,0.28);margin-top:4px;letter-spacing:.1em}
+.start{max-width:620px;margin:0 auto;padding:11vh 24px 60px}
+.devabig{font-family:var(--deva);font-size:64px;line-height:1;color:var(--gold-hi)}
+#lmTitle{font-family:var(--disp);font-size:clamp(44px,7vw,64px);font-weight:600;line-height:1;margin-top:8px}
+#lmTitle em{font-style:italic;color:var(--gold-hi)}
+#lmSub{font-size:17px;color:rgba(255,244,223,.85);margin-top:14px;line-height:1.6}
+#dropZone{margin-top:28px;border:1.5px dashed rgba(243,201,105,.5);border-radius:18px;padding:26px 24px;text-align:center;cursor:pointer;transition:.2s;background:rgba(255,244,223,.04)}
+#dropZone:hover,#dropZone.drag{border-color:var(--gold-hi);background:rgba(243,201,105,.08)}
+#dropIcon{width:44px;height:44px;margin:0 auto 10px;border-radius:50%;display:grid;place-items:center;background:rgba(243,201,105,.15);color:var(--gold-hi)}
+#dropText{font-size:16px;font-weight:600;color:var(--cream)}
+#dropSub{font-size:13.5px;color:var(--muted);margin-top:3px}
 #fileInput{display:none}
+.or{font-size:13px;color:var(--muted);margin:16px 0 10px;text-align:center}
+#camBtn{display:block;margin:0 auto;background:transparent;border:1.5px solid var(--gold-hi);color:var(--gold-hi);font-family:var(--body);font-size:15px;font-weight:700;padding:12px 24px;border-radius:999px;cursor:pointer;transition:.2s}
+#camBtn:hover{background:rgba(243,201,105,.12)}
+#modelStats{font-size:13.5px;color:var(--muted);text-align:center;margin-top:14px}
+.links{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-top:22px;font-size:14px}
+.links a{color:var(--gold-hi);text-decoration:none;border-bottom:1px solid rgba(243,201,105,.4)}
+.temple{position:absolute;left:0;right:0;bottom:0;height:26px;width:100%;display:block}
 
-.or{font-size:.48rem;color:rgba(245,166,35,0.25);letter-spacing:.3em;text-transform:uppercase}
-#camBtn{
-  background:transparent;border:1px solid rgba(245,166,35,0.35);color:rgba(245,166,35,0.7);
-  font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;
-  padding:11px 28px;border-radius:3px;cursor:pointer;transition:.2s;
-}
-#camBtn:hover{background:rgba(245,166,35,0.08);border-color:rgba(245,166,35,0.65)}
-#modelStats{font-size:.5rem;color:rgba(245,166,35,0.3);letter-spacing:.1em;text-align:center}
-
-/* Corners */
-.cor{position:fixed;width:20px;height:20px;border-color:rgba(245,166,35,0.18);border-style:solid;z-index:30;pointer-events:none}
-.cor.tl{top:12px;left:12px;border-width:1px 0 0 1px}
-.cor.tr{top:12px;right:12px;border-width:1px 1px 0 0}
-.cor.bl{bottom:12px;left:12px;border-width:0 0 1px 1px}
-.cor.br{bottom:12px;right:12px;border-width:0 1px 1px 0}
-#watermark{position:fixed;bottom:22px;right:24px;z-index:40;pointer-events:none;
-  font-family:'Yatra One',cursive;font-size:.65rem;letter-spacing:.12em;color:rgba(245,166,35,0.25)}
+.cor{position:fixed;width:22px;height:22px;border-color:rgba(243,201,105,.35);border-style:solid;z-index:30;pointer-events:none}
+.cor.tl{top:12px;left:12px;border-width:1.5px 0 0 1.5px}
+.cor.tr{top:12px;right:12px;border-width:1.5px 1.5px 0 0}
+.cor.bl{bottom:12px;left:12px;border-width:0 0 1.5px 1.5px}
+.cor.br{bottom:12px;right:12px;border-width:0 1.5px 1.5px 0}
+#watermark{position:fixed;bottom:24px;right:26px;z-index:40;pointer-events:none;font-size:13px;font-weight:600;color:rgba(243,201,105,.7)}
+@media(max-width:700px){#hastaPanel{width:100%;top:auto;height:52%;background:linear-gradient(0deg,rgba(46,7,12,.95) 65%,transparent);justify-content:flex-end;padding:20px 22px 70px}#hastaDev{font-size:40px}#statusArea{display:none}}
 </style>
 </head>
 <body>
 
 <!-- LOAD MODEL SCREEN -->
 <div id="loadModel">
-  <div id="lmTitle">HASTA</div>
-  <div id="lmSub">Hasta Performer</div>
-  <div id="lmInfo">Load your personal model · then perform</div>
-  <div class="lbar"><div class="lfill"></div></div>
+  <div class="start">
+    <div class="devabig">हस्त</div>
+    <div id="lmTitle">Hasta <em>Performer</em></div>
+    <p id="lmSub">Show a hasta to the camera and see it recognised live — its name, its meaning in Sanskrit, and its viniyoga. Load the model you recorded in the Hasta Trainer to get started.</p>
 
-  <div id="dropZone" onclick="document.getElementById('fileInput').click()"
-    ondragover="event.preventDefault();this.classList.add('drag')"
-    ondragleave="this.classList.remove('drag')"
-    ondrop="handleDrop(event)">
-    <div id="dropIcon">📂</div>
-    <div id="dropText">Drop hasta-model.json here</div>
-    <div id="dropSub">or click to browse</div>
+    <div id="dropZone" onclick="document.getElementById('fileInput').click()"
+      ondragover="event.preventDefault();this.classList.add('drag')"
+      ondragleave="this.classList.remove('drag')"
+      ondrop="handleDrop(event)">
+      <div id="dropIcon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></div>
+      <div id="dropText">Drop your hasta-model.json here</div>
+      <div id="dropSub">or click to choose the file</div>
+    </div>
+    <input type="file" id="fileInput" accept=".json" onchange="loadFile(this)">
+
+    <div class="or">or</div>
+    <button id="camBtn" onclick="startWithoutModel()">Try it without a model</button>
+    <div id="modelStats">No model loaded</div>
+    <div class="links">
+      <a href="../hasta-trainer/">No model yet? Record one in the Hasta Trainer</a>
+      <a href="../">Back to Routes &amp; Roots</a>
+    </div>
   </div>
-  <input type="file" id="fileInput" accept=".json" onchange="loadFile(this)">
-
-  <div class="or">— or —</div>
-  <button id="camBtn" onclick="startWithoutModel()">Continue without model (demo mode)</button>
-  <div id="modelStats">No model loaded</div>
-  <div style="font-size:.55rem;letter-spacing:.18em;text-transform:uppercase"><a href="../hasta-trainer/" style="color:rgba(245,166,35,0.75);text-decoration:none;border-bottom:1px solid rgba(245,166,35,0.3)">No model yet? Record one in Hasta Trainer →</a></div>
-  <div style="font-size:.55rem;letter-spacing:.18em;text-transform:uppercase"><a href="../" style="color:rgba(245,166,35,0.75);text-decoration:none;border-bottom:1px solid rgba(245,166,35,0.3)">← Routes &amp; Roots</a></div>
+  <svg class="temple" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="tp" width="48" height="26" patternUnits="userSpaceOnUse"><rect width="48" height="26" fill="#2E070C"/><path d="M0 26 L9 18 L13 18 L18 11 L22 11 L24 4 L26 11 L30 11 L35 18 L39 18 L48 26 Z" fill="#D4A537"/><path d="M17 26 L24 18 L31 26 Z" fill="#6B0F1A"/></pattern></defs><rect width="100%" height="100%" fill="url(#tp)"/></svg>
 </div>
 
 <!-- CAMERA -->
@@ -168,12 +138,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:#08050f;color:#fdf
 
 <!-- TOP BAR -->
 <div id="topbar">
-  <div><div id="logo">HASTA</div><div id="logoSub">Hasta Performer · Routes &amp; Roots</div></div>
+  <div><div id="logo">Hasta <em>Performer</em></div><div id="logoSub"><a href="../">Routes &amp; Roots</a></div></div>
   <div id="statusArea">
-    <div>CAMERA <span class="dot" id="dCam"></span></div>
-    <div>TRACKING <span class="dot" id="dTrack"></span></div>
-    <div>HANDS <span class="dot" id="dHands"></span></div>
-    <div>HASTA <span class="dot" id="dHasta"></span></div>
+    <div><span class="dot" id="dCam"></span>Camera</div>
+    <div><span class="dot" id="dTrack"></span>Tracking</div>
+    <div><span class="dot" id="dHands"></span>Hands</div>
+    <div><span class="dot" id="dHasta"></span>Hasta</div>
   </div>
 </div>
 
@@ -198,12 +168,12 @@ html,body{width:100vw;height:100vh;overflow:hidden;background:#08050f;color:#fdf
 
 <!-- Await -->
 <div id="await">
-  <div id="awaitSym">🤲</div>
-  <div id="awaitL1">Show your hands · Hasta recognition active</div>
-  <div id="awaitL2">Single hand = Asamyuta · Both hands = Samyuta</div>
+  <div id="awaitSym">हस्त</div>
+  <div id="awaitL1">Show your hands to the camera</div>
+  <div id="awaitL2">One hand for asamyuta, both hands for samyuta</div>
 </div>
 
-<div id="watermark">@routes._.roots ✦</div>
+<div id="watermark">@routes._.roots</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
@@ -311,7 +281,7 @@ const W=()=>cv.width,H=()=>cv.height;
 // ═══════════════════════════════════════════════
 const SKEL=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[0,9],[9,10],[10,11],[11,12],[0,13],[13,14],[14,15],[15,16],[0,17],[17,18],[18,19],[19,20],[5,9],[9,13],[13,17]];
 const TIPS=[4,8,12,16,20];
-const FCOLS=[{h:40,s:95,l:58},{h:185,s:78,l:48},{h:280,s:72,l:62},{h:15,s:92,l:55},{h:55,s:100,l:52}];
+const FCOLS=[{h:43,s:85,l:62},{h:174,s:55,l:55},{h:22,s:90,l:58},{h:330,s:55,l:70},{h:140,s:55,l:60}];
 
 let T=0;
 const particles=[];
@@ -408,8 +378,8 @@ let pendingKey='',pendingFrames=0;
 const CONFIRM_FRAMES=18;
 let confirmedHasta=null;
 
-const COL_ASA={h:40,s:95,l:58};
-const COL_SAM={h:185,s:78,l:48};
+const COL_ASA={h:43,s:85,l:62};
+const COL_SAM={h:174,s:55,l:50};
 
 function updateRecognition(){
   if(!currentHands.length){
@@ -434,7 +404,7 @@ function updateRecognition(){
   const result=recognise(query,handsCount);
   if(!result){
     document.getElementById('modePill').className='modePill';
-    document.getElementById('modePill').textContent=handsCount===2?'🙌 Both hands — no model':'☝ One hand — no model';
+    document.getElementById('modePill').textContent=handsCount===2?'Both hands · load a model to recognise':'One hand · load a model to recognise';
     return;
   }
 
@@ -460,8 +430,8 @@ function updateRecognition(){
 
   // Mode pill
   const pill=document.getElementById('modePill');
-  if(handsCount===2){pill.className='modePill sam';pill.textContent='🙌 Samyuta';}
-  else{pill.className='modePill asa';pill.textContent='☝ Asamyuta';}
+  if(handsCount===2){pill.className='modePill sam';pill.textContent='Both hands · Samyuta';}
+  else{pill.className='modePill asa';pill.textContent='One hand · Asamyuta';}
 }
 
 function updatePanel(h,handsCount){

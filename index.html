@@ -33,6 +33,9 @@ if(q&&q.has('me')){try{q.delete('me');var s=q.toString();history.replaceState(nu
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
 body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
 img,svg{display:block}
@@ -65,9 +68,10 @@ img,svg{display:block}
   background-image:radial-gradient(rgba(243,201,105,.9) 1.2px,transparent 1.6px);background-size:28px 28px;
   -webkit-mask-image:radial-gradient(circle at 70% 45%,#000,transparent 70%);mask-image:radial-gradient(circle at 70% 45%,#000,transparent 70%)}
 .mandala{position:absolute;right:-180px;top:50%;width:min(980px,120vw);aspect-ratio:1;transform:translateY(-50%);opacity:.55;pointer-events:none}
-.mandala svg{width:100%;height:100%;animation:spin 140s linear infinite}
+.mandala svg{width:100%;height:100%;animation:spin 140s linear infinite;will-change:transform}
 .mandala .ring2{animation:spinr 90s linear infinite;transform-origin:50% 50%}
 @keyframes spin{to{transform:rotate(360deg)}}
+.hero.paused .mandala svg,.hero.paused .mandala .ring2,.hero.paused .petal,.hero.paused .ghungroo .bell{animation-play-state:paused}
 @keyframes spinr{to{transform:rotate(-360deg)}}
 .petals{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .petal{position:absolute;top:-40px;width:14px;height:20px;border-radius:60% 60% 50% 50%/70% 70% 40% 40%;
@@ -273,7 +277,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
   <div class="ghungroo" id="ghungroo" role="button" tabindex="0" aria-label="Ring the ghungroo">
     <svg viewBox="0 0 1200 120" preserveAspectRatio="none" id="ghSvg"></svg>
   </div>
-  <div class="hint">✦ tap the ghungroo</div>
+  <div class="hint">Tap the ghungroo</div>
 
   <div class="wrap" style="width:100%">
     <div class="hero-inner">
@@ -382,7 +386,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
         <span><i style="border:2.5px solid #6E4A3A"></i>Wave</span>
       </div>
       <div class="democtl rv">
-        <button class="btn maroon" id="demoPlay" type="button">▶ Play</button>
+        <button class="btn maroon" id="demoPlay" type="button">Play</button>
         <div class="speed" id="demoSpeed" role="group" aria-label="Speed">
           <button type="button" data-s="1" class="on">1st</button>
           <button type="button" data-s="2">2nd</button>
@@ -453,7 +457,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
         </div>
       </a>
     </div>
-    <p class="note rv"><span aria-hidden="true">✦</span> The hasta tools use your camera and work best in Chrome. Nothing is uploaded — everything runs on your own device.</p>
+    <p class="note rv">The hasta tools use your camera and work best in Chrome. Nothing is uploaded — everything runs on your own device.</p>
   </div>
 </section>
 
@@ -480,6 +484,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
   </div>
 </footer>
 
+<script src="lenis.min.js"></script>
 <script>
 (function(){
 'use strict';
@@ -487,6 +492,27 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
 var track = function(name, params){ try{ if(window.gtag) window.gtag('event', name, params||{}); }catch(e){} };
 var NS = 'http://www.w3.org/2000/svg';
 function el(tag, attrs, parent){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k, attrs[k]); if(parent) parent.appendChild(e); return e; }
+
+/* smooth scrolling (skipped for people who prefer reduced motion) */
+var lenis = null;
+if(!RM && window.Lenis){
+  lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1 });
+  (function raf(t){ lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
+}
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var id=a.getAttribute('href'); if(id.length<2) return; var t=document.querySelector(id); if(!t) return;
+    e.preventDefault();
+    if(lenis) lenis.scrollTo(t, { offset: -70, duration: 1.2 }); else t.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' });
+  });
+});
+
+/* pause the hero's motion when it is scrolled away */
+(function(){
+  var hero=document.getElementById('hero');
+  if(!('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function(es){ es.forEach(function(e){ hero.classList.toggle('paused', !e.isIntersecting); }); }, {threshold:0}).observe(hero);
+})();
 
 /* top bar */
 var top = document.getElementById('top');
@@ -592,8 +618,8 @@ function tick(kind){
   var R=170, dots=[], labels=[];
   el('circle',{r:R+38,fill:'#FFFBF2',stroke:'#E7CFA0','stroke-width':2},svg);
   el('circle',{r:R,fill:'none',stroke:'#D4A537','stroke-width':1.5,'stroke-dasharray':'2 8'},svg);
-  el('circle',{r:R-62,fill:'#6B0F1A'},svg);
-  el('circle',{r:R-70,fill:'none',stroke:'#F3C969','stroke-width':1.2,'stroke-dasharray':'3 5'},svg);
+  el('circle',{r:R-96,fill:'#6B0F1A'},svg);
+  el('circle',{r:R-103,fill:'none',stroke:'#F3C969','stroke-width':1.2,'stroke-dasharray':'3 5'},svg);
   // anga arcs
   function arc(a0,a1,r,col){ var p0=[Math.cos(a0)*r,Math.sin(a0)*r],p1=[Math.cos(a1)*r,Math.sin(a1)*r]; el('path',{d:'M'+p0[0]+' '+p0[1]+' A'+r+' '+r+' 0 '+((a1-a0)>Math.PI?1:0)+' 1 '+p1[0]+' '+p1[1],fill:'none',stroke:col,'stroke-width':7,'stroke-linecap':'round','stroke-opacity':.85},svg); }
   var step=2*Math.PI/8, off=-Math.PI/2;
@@ -605,20 +631,33 @@ function tick(kind){
     var fill=b.t==='sam'?'#C1121F':b.t==='clap'?'#2A0A0E':b.t==='finger'?'#D4A537':'#FFFBF2';
     var c=el('circle',{cx:x.toFixed(1),cy:y.toFixed(1),r:b.t==='finger'?13:19,fill:fill,stroke:b.t==='wave'?'#6E4A3A':'#FFFBF2','stroke-width':b.t==='wave'?3:3,'class':'beat-dot'},svg);
     dots.push(c);
-    var lr=R-36, t=el('text',{x:(Math.cos(a)*lr).toFixed(1),y:(Math.sin(a)*lr+7).toFixed(1),'text-anchor':'middle','class':'sollu'},svg); t.textContent=b.s; labels.push(t);
+    var lr=R-40, t=el('text',{x:(Math.cos(a)*lr).toFixed(1),y:(Math.sin(a)*lr+7).toFixed(1),'text-anchor':'middle','class':'sollu'},svg); t.textContent=b.s; labels.push(t);
     el('text',{x:(x).toFixed(1),y:(y+5).toFixed(1),'text-anchor':'middle','font-family':'DM Sans','font-size':12,'font-weight':700,fill:b.t==='finger'||b.t==='wave'?'#6B0F1A':'#FFF4DF'},svg).textContent=i+1;
   });
-  var ct=el('text',{y:-6,'text-anchor':'middle','class':'center-txt',fill:'#F3C969','font-size':38},svg); ct.textContent='Adi';
-  var cs=el('text',{y:24,'text-anchor':'middle','font-family':'DM Sans','font-size':12,'letter-spacing':3,fill:'rgba(255,244,223,.8)'},svg); cs.textContent='8 BEATS · I O O';
+  var ct=el('text',{y:-2,'text-anchor':'middle','class':'center-txt',fill:'#F3C969','font-size':34},svg); ct.textContent='Adi';
+  var cs=el('text',{y:22,'text-anchor':'middle','font-family':'DM Sans','font-size':10,'letter-spacing':1.6,fill:'rgba(255,244,223,.8)'},svg); cs.textContent='8 BEATS · I O O';
 
   var playBtn=document.getElementById('demoPlay'), read=document.getElementById('readline'), speedBox=document.getElementById('demoSpeed');
   var speed=1, playing=false, timer=null, idx=0;
   function flow(i){ var out=[]; for(var j=0;j<speed;j++) out.push(phrase[(i*speed+j)%phrase.length]); return out; }
   function paint(i){ dots.forEach(function(d,k){ d.classList.toggle('on',k===i); }); labels.forEach(function(l,k){ l.classList.toggle('on',k===i); }); }
   function showLine(i){ read.textContent = beats.map(function(b,k){ var w=flow(k).join(''); return k===i ? '['+w+']' : w; }).join(' · '); }
-  function stop(){ playing=false; clearTimeout(timer); playBtn.textContent='▶ Play'; paint(-1); showLine(-1); }
+  // what is written on each beat of the wheel changes with the speed: 1 / 2 / 4 syllables
+  function relabel(){
+    var size = speed===1 ? 22 : speed===2 ? 19 : 15.5;
+    labels.forEach(function(l,k){
+      l.textContent = flow(k).join(''); l.setAttribute('font-size', size); l.style.fontSize = size+'px';
+      // keep the word clear of the beat markers and the centre disk: pull wide words inward on the sides
+      var a=off+step*k, c=Math.abs(Math.cos(a)), s=Math.abs(Math.sin(a));
+      var w=l.getComputedTextLength ? l.getComputedTextLength() : 0, ext=w/2*c + 8*s;
+      var r=Math.min(R-40, R-22-ext);
+      l.setAttribute('x',(Math.cos(a)*r).toFixed(1)); l.setAttribute('y',(Math.sin(a)*r+6).toFixed(1));
+    });
+  }
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(relabel);
+  function stop(){ playing=false; clearTimeout(timer); playBtn.textContent='Play'; paint(-1); showLine(-1); }
   function play(){
-    playing=true; playBtn.textContent='◼ Stop'; idx=0; ctx();
+    playing=true; playBtn.textContent='Stop'; idx=0; ctx();
     var beatMs=60000/70, sub=0, t0=performance.now(), n=0, perTick=beatMs/speed;
     (function stepFn(){
       if(!playing) return;
@@ -632,9 +671,10 @@ function tick(kind){
   playBtn.addEventListener('click', function(){ playing ? stop() : play(); });
   speedBox.querySelectorAll('button').forEach(function(b){ b.addEventListener('click', function(){
     speed=+b.getAttribute('data-s'); speedBox.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x===b); });
+    relabel();
     if(playing){ stop(); play(); } else showLine(-1);
   }); });
-  showLine(-1);
+  relabel(); showLine(-1);
 
   // tiny beat ring on the taal card
   var mini=document.getElementById('miniBeats');
