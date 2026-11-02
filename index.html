@@ -58,16 +58,9 @@ img,svg{display:block}
     linear-gradient(160deg,var(--maroon-800),var(--maroon-900) 70%);}
 .hero .glow{position:absolute;width:640px;height:640px;margin:-320px 0 0 -320px;border-radius:50%;pointer-events:none;
   background:radial-gradient(circle,rgba(243,201,105,.20),transparent 62%);transform:translate3d(var(--mx,-999px),var(--my,-999px),0)}
-.hero .dots{position:absolute;inset:0;opacity:.18;pointer-events:none;
-  background-image:radial-gradient(rgba(243,201,105,.9) 1.2px,transparent 1.6px);background-size:28px 28px;
-  -webkit-mask-image:radial-gradient(circle at 70% 45%,#000,transparent 70%);mask-image:radial-gradient(circle at 70% 45%,#000,transparent 70%)}
-.mandala{position:absolute;top:54%;right:max(3vw,calc((100vw - 1240px) / 2));width:min(540px,44vw);aspect-ratio:1;transform:translateY(-50%);opacity:.78;pointer-events:none}
-.mandala svg{display:block;width:100%;height:100%;animation:spin 160s linear infinite;transform-origin:50% 50%;will-change:transform}
-/* the inner lotus turns the other way around its own centre */
-.mandala .ring2{animation:spinr 110s linear infinite;transform-box:fill-box;transform-origin:center}
-@media(max-width:900px){.mandala{right:50%;top:42%;width:min(520px,94vw);transform:translate(50%,-50%);opacity:.2}}
+.hero .kolam-bg{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-.hero.paused .mandala svg,.hero.paused .mandala .ring2,.hero.paused .petal,.hero.paused .ghungroo .bell,.hero.paused .ghungroo .leaf{animation-play-state:paused}
+.hero.paused .petal,.hero.paused .ghungroo .bell{animation-play-state:paused}
 @keyframes spinr{to{transform:rotate(-360deg)}}
 .petals{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .petal{position:absolute;top:-40px;width:14px;height:20px;border-radius:60% 60% 50% 50%/70% 70% 40% 40%;
@@ -93,14 +86,10 @@ img,svg{display:block}
 .btn.maroon:hover{background:var(--red);transform:translateY(-2px)}
 
 /* ghungroo string */
-.ghungroo{position:absolute;left:0;right:0;top:66px;z-index:3;height:118px;cursor:pointer}
-.ghungroo svg{display:block;width:100%;height:100%;overflow:visible}
+.ghungroo{position:absolute;left:0;right:0;top:70px;z-index:3;height:120px;cursor:pointer}
+.ghungroo svg{width:100%;height:100%}
 .ghungroo .bell{transform-box:fill-box;transform-origin:50% 0;animation:sway 3.4s ease-in-out infinite alternate}
-.ghungroo .leaf{transform-box:fill-box;transform-origin:50% 0;animation:leafsway 4.6s ease-in-out infinite alternate}
 .ghungroo.ring .bell{animation:jingle .55s ease-in-out 3 alternate}
-.ghungroo.ring .leaf{animation:leafjig .4s ease-in-out 3 alternate}
-@keyframes leafsway{from{transform:rotate(-2.5deg)}to{transform:rotate(2.5deg)}}
-@keyframes leafjig{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
 @keyframes sway{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
 @keyframes jingle{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
 .hint{position:absolute;right:22px;top:160px;z-index:3;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:rgba(243,201,105,.7);pointer-events:none}
@@ -219,7 +208,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
 
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .mandala svg,.mandala .ring2,.petal,.ghungroo .bell,.ghungroo .leaf,.flame{animation:none!important}
+  .petal,.ghungroo .bell,.flame{animation:none!important}
   .petals{display:none}
   .rv{opacity:1;transform:none;transition:none}
 }
@@ -271,15 +260,14 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
 
 <!-- ═══════════ HERO ═══════════ -->
 <section class="hero" id="hero">
-  <div class="dots"></div>
-  <div class="mandala" aria-hidden="true"><svg viewBox="-500 -500 1000 1000" id="mandala"></svg></div>
+  <canvas class="kolam-bg" id="kolamBg" aria-hidden="true"></canvas>
   <div class="glow" id="glow"></div>
   <div class="petals" id="petals" aria-hidden="true"></div>
 
-  <div class="ghungroo" id="ghungroo" role="button" tabindex="0" aria-label="Ring the temple bells">
+  <div class="ghungroo" id="ghungroo" role="button" tabindex="0" aria-label="Ring the ghungroo">
     <svg id="ghSvg"></svg>
   </div>
-  <div class="hint">Tap the bells</div>
+  <div class="hint">Tap the ghungroo</div>
 
   <div class="wrap" style="width:100%">
     <div class="hero-inner">
@@ -529,27 +517,56 @@ if('IntersectionObserver' in window){
 } else rv.forEach(function(x){ x.classList.add('in'); });
 
 
-/* kolam: a lotus drawn in gold lines, ringed with pulli (dots) — fully inside its box */
+/* kolam background: a lattice of small lotus kolams across the whole hero.
+   Near the pointer (or where you tap) they light up, open and turn; a slow shimmer passes through when idle. */
 (function(){
-  var m = document.getElementById('mandala'), outer = el('g', {}, m), inner = el('g', {'class':'ring2'}, m);
-  var gold='#F3C969', gold2='#D4A537', red='#C1121F', cream='#FFF4DF';
-  function lotus(g, n, r0, r1, w, stroke, sw, fill, fop, rot){
-    var mid=-(r0+r1)/2;
-    for(var i=0;i<n;i++){ el('path',{d:'M0 '+(-r0)+' Q'+w+' '+mid+' 0 '+(-r1)+' Q'+(-w)+' '+mid+' 0 '+(-r0)+'Z',fill:fill||'none','fill-opacity':fop||0,stroke:stroke,'stroke-width':sw,'stroke-linejoin':'round',transform:'rotate('+((rot||0)+360/n*i)+')'},g); }
+  var hero=document.getElementById('hero'), cv=document.getElementById('kolamBg');
+  if(!cv || !cv.getContext) return;
+  var c=cv.getContext('2d'), dpr=Math.min(window.devicePixelRatio||1,2), TAU=Math.PI*2;
+  var W=0,H=0,step=118,cells=[],px=-9999,py=-9999,raf=0,visible=true,t0=performance.now(),lastMove=0,tick=0,rt=0;
+  function layout(){
+    W=hero.clientWidth; H=hero.clientHeight;
+    cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr); c.setTransform(dpr,0,0,dpr,0,0);
+    step = W<700 ? 86 : 118;
+    var cols=Math.ceil(W/step)+2, rows=Math.ceil(H/(step*0.866))+2; cells=[];
+    for(var r=0;r<rows;r++) for(var k=0;k<cols;k++) cells.push({x:(k-0.5)*step+(r%2?step/2:0), y:(r-0.5)*step*0.866, g:0, kind:r%2});
+    frame(performance.now(), true);
   }
-  function dots(g, n, r, rad, fill, rot){ for(var i=0;i<n;i++){ var a=2*Math.PI*i/n+(rot||0); el('circle',{cx:(Math.cos(a)*r).toFixed(1),cy:(Math.sin(a)*r).toFixed(1),r:rad,fill:fill},g);} }
-  function ring(g, r, sw, col, dash, op){ el('circle',{r:r,fill:'none',stroke:col,'stroke-width':sw,'stroke-dasharray':dash||'none','stroke-opacity':op||.85},g); }
-  ring(outer,478,2,gold2); dots(outer,72,462,3.2,gold);
-  lotus(outer,36,404,446,19,gold,1.8);
-  ring(outer,396,1.2,gold,'3 9'); dots(outer,36,380,5,gold2,Math.PI/36);
-  lotus(outer,16,212,362,62,gold,2.2,red,.22);
-  lotus(outer,16,236,334,30,gold2,1.3,null,0,11.25);
-  dots(outer,16,350,4,cream,Math.PI/16);
-  ring(inner,202,2.2,gold); dots(inner,48,188,2.6,gold2);
-  lotus(inner,8,58,176,54,gold,2.4,gold,.12);
-  lotus(inner,8,78,150,28,cream,1.3,null,0,22.5);
-  ring(inner,50,1.8,gold);
-  for(var a=-2;a<=2;a++) for(var b=-2;b<=2;b++){ if(Math.abs(a)+Math.abs(b)>2) continue; var x=(a-b)*12, y=(a+b)*12, c=(a===0&&b===0); el('circle',{cx:x,cy:y,r:c?7:3.2,fill:c?gold:gold2},inner); }
+  function petal(r0,r1,w){ var m=-(r0+r1)/2; c.moveTo(0,-r0); c.quadraticCurveTo(w,m,0,-r1); c.quadraticCurveTo(-w,m,0,-r0); }
+  function motif(cell){
+    var g=cell.g, s=step*0.5*(1+0.18*g), n=cell.kind?6:8, a=0.14+0.6*g;
+    c.save(); c.translate(cell.x,cell.y); c.rotate((cell.kind?Math.PI/6:0)+g*0.9);
+    c.beginPath(); for(var i=0;i<n;i++){ petal(s*0.16, s*0.72, s*(cell.kind?0.24:0.18)); c.rotate(TAU/n); }
+    c.lineWidth=1+0.8*g; c.strokeStyle='rgba(243,201,105,'+a.toFixed(3)+')'; c.stroke();
+    if(g>0.04){ c.fillStyle='rgba(193,18,31,'+(0.3*g).toFixed(3)+')'; c.fill(); }
+    c.fillStyle='rgba(243,201,105,'+(a*0.9).toFixed(3)+')';
+    for(var j=0;j<n;j++){ var aa=TAU*j/n+TAU/(2*n); c.beginPath(); c.arc(Math.cos(aa)*s*0.62, Math.sin(aa)*s*0.62, 1.3+1.2*g, 0, TAU); c.fill(); }
+    c.beginPath(); c.arc(0,0,1.8+2.2*g,0,TAU); c.fill();
+    c.restore();
+  }
+  function frame(now, once){
+    raf=0;
+    // when nobody is touching it, draw every other frame — the shimmer is slow anyway
+    if(!once && now-lastMove>1500 && (++tick%2)){ if(visible && !RM) raf=requestAnimationFrame(frame); return; }
+    var t=(now-t0)/1000, R=step*2.3;
+    c.clearRect(0,0,W,H);
+    for(var i=0;i<cells.length;i++){
+      var cell=cells[i], dx=cell.x-px, dy=cell.y-py, d=Math.sqrt(dx*dx+dy*dy);
+      var target=d<R ? Math.pow(1-d/R,1.6) : 0;
+      if(!RM){ var w=Math.sin(t*0.7-(cell.x*0.6+cell.y)/220); if(w>0.86) target=Math.max(target,(w-0.86)*1.6); }
+      cell.g+=(target-cell.g)*0.09;
+      motif(cell);
+    }
+    if(!once && visible && !RM) raf=requestAnimationFrame(frame);
+  }
+  function kick(){ if(!raf && visible && !RM) raf=requestAnimationFrame(frame); }
+  function at(e){ var r=hero.getBoundingClientRect(); px=e.clientX-r.left; py=e.clientY-r.top; lastMove=performance.now(); kick(); }
+  hero.addEventListener('pointermove', at, {passive:true});
+  hero.addEventListener('pointerdown', at, {passive:true});
+  hero.addEventListener('pointerleave', function(){ px=py=-9999; });
+  window.addEventListener('resize', function(){ clearTimeout(rt); rt=setTimeout(layout,150); });
+  if('IntersectionObserver' in window) new IntersectionObserver(function(es){ visible=es[0].isIntersecting; if(visible) kick(); else if(raf){ cancelAnimationFrame(raf); raf=0; } }).observe(hero);
+  layout(); kick();
 })();
 
 /* pointer glow on hero */
@@ -600,39 +617,25 @@ function tick(kind){
   o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+0.11);
 }
 
-/* thoranam: mango leaves and marigolds on a string, with brass bells to ring */
+/* ghungroo string — drawn at the real width, so the bells stay round on every screen */
 (function(){
   var svg=document.getElementById('ghSvg'), wrap=document.getElementById('ghungroo');
   function draw(){
     while(svg.lastChild) svg.removeChild(svg.lastChild);
-    var W=Math.max(320, wrap.clientWidth), H=wrap.clientHeight||118, small=W<700;
+    var W=Math.max(320, wrap.clientWidth), H=wrap.clientHeight||120, small=W<700;
+    var sag=small?34:56, r=small?7:9, gap=small?30:46;
     svg.setAttribute('viewBox','0 0 '+W+' '+H);
-    var sag=small?10:16, top=8, step=small?26:34, L=small?36:48, lw=small?9:12;
-    function yAt(x){ var u=(x-W/2)/(W/2); return top+sag*(1-u*u); }
-    var d='M0 '+top; for(var x=0;x<=W;x+=20) d+=' L'+x+' '+yAt(x).toFixed(1);
-    d+=' L'+W+' '+top;
-    el('path',{d:d,fill:'none',stroke:'#D4A537','stroke-width':2.4},svg);
-    var n=Math.floor(W/step), off=(W-(n-1)*step)/2;
-    for(var i=0;i<n;i++){
-      var cx=off+i*step, y=yAt(cx)+1;
-      if(i%6===3){ // a brass bell on a longer cord
-        var g=el('g',{'class':'bell'},svg); g.style.animationDelay=(-(i%5)*0.5)+'s';
-        var cord=small?18:26, br=small?7:9.5, by=y+cord;
-        el('line',{x1:cx,y1:y,x2:cx,y2:by,stroke:'#D4A537','stroke-width':1.4},g);
-        el('path',{d:'M'+(cx-br)+' '+(by+br*1.5)+' Q'+(cx-br)+' '+by+' '+cx+' '+by+' Q'+(cx+br)+' '+by+' '+(cx+br)+' '+(by+br*1.5)+' Z',fill:'url(#bellG)',stroke:'#9C7420','stroke-width':1},g);
-        el('rect',{x:cx-br-1.5,y:by+br*1.5-1,width:2*br+3,height:3,rx:1.5,fill:'#B8862B'},g);
-        el('circle',{cx:cx,cy:by+br*1.5+3,r:2.4,fill:'#9C7420'},g);
-      } else if(i%2===0){ // mango leaf
-        var lg=el('g',{'class':'leaf'},svg); lg.style.animationDelay=(-(i%7)*0.6)+'s';
-        var len=L*(0.9+((i*37)%10)/50), col=(i%4===0)?'#2E7D4F':'#3E9B5F';
-        el('path',{d:'M'+cx+' '+y+' C'+(cx+lw)+' '+(y+len*0.3)+' '+(cx+lw*0.7)+' '+(y+len*0.75)+' '+cx+' '+(y+len)+' C'+(cx-lw*0.7)+' '+(y+len*0.75)+' '+(cx-lw)+' '+(y+len*0.3)+' '+cx+' '+y+' Z',fill:col},lg);
-        el('path',{d:'M'+cx+' '+(y+2)+' L'+cx+' '+(y+len-3),stroke:'#1F5C38','stroke-width':1,'stroke-opacity':.7},lg);
-      } else { // marigold
-        var fy=y+(small?7:9), fr=small?6:8;
-        for(var k=0;k<8;k++){ var a=Math.PI*2*k/8; el('circle',{cx:(cx+Math.cos(a)*fr*0.55).toFixed(1),cy:(fy+Math.sin(a)*fr*0.55).toFixed(1),r:fr*0.55,fill:(k%2?'#F08A24':'#F6A93B')},svg); }
-        el('circle',{cx:cx,cy:fy,r:fr*0.45,fill:'#FBC93D'},svg);
-        el('circle',{cx:cx,cy:fy,r:fr*0.18,fill:'#D9731A'},svg);
-      }
+    var yAt=function(x){ var u=(x-W/2)/(W/2); return 14+sag*(1-u*u); };
+    el('path',{d:'M0 14 Q'+(W/2)+' '+(14+2*sag)+' '+W+' 14',fill:'none',stroke:'#F3C969','stroke-width':2.4,'stroke-opacity':.85},svg);
+    el('path',{d:'M0 20 Q'+(W/2)+' '+(20+2*sag)+' '+W+' 20',fill:'none',stroke:'#C1121F','stroke-width':1.6,'stroke-opacity':.7},svg);
+    var n=Math.max(8, Math.round(W/gap));
+    for(var i=1;i<n;i++){
+      var x=W*i/n, y=yAt(x);
+      var g=el('g',{'class':'bell'},svg); g.style.animationDelay=(-(i%7)*0.45)+'s';
+      el('line',{x1:x,y1:y,x2:x,y2:y+r-1,stroke:'#D4A537','stroke-width':1.4},g);
+      el('circle',{cx:x,cy:y+r*1.9,r:r,fill:'url(#bellG)',stroke:'#9C7420','stroke-width':1},g);
+      el('path',{d:'M'+(x-r/2)+' '+(y+r*2.1)+' h'+r,stroke:'#6B0F1A','stroke-width':1.6,'stroke-linecap':'round'},g);
+      el('circle',{cx:x-r/3,cy:y+r*1.5,r:r*0.22,fill:'#FFF6D6','fill-opacity':.9},g);
     }
   }
   draw();
