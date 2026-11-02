@@ -1,7 +1,4 @@
-/* Google Analytics for Routes & Roots — its own property (G-WFGB7D2MBZ), separate from www.jinalmandalia.com.
-   - Open any page once with ?me=1 on each of your devices to stop counting your own visits (?me=0 undoes it).
-   - Short personal links: dance.jinalmandalia.com/?r=guru shows up in GA as traffic source "guru".
-   - Pages call jmTrack('event_name', {…}) for clicks and tool use; jmTrackOnce sends an event only once per visit. */
+/* Analytics + small click helpers (jmTrack / jmTrackOnce). */
 (function () {
   var ID = 'G-WFGB7D2MBZ', q = null;
   try { q = new URLSearchParams(location.search); } catch (e) {}
@@ -22,7 +19,7 @@
     ref = ref.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 60);
     if (ref) {
       cfg.page_location = location.origin + location.pathname +
-        '?utm_source=' + encodeURIComponent(ref) + '&utm_medium=personal_link&utm_campaign=dance';
+        '?utm_source=' + encodeURIComponent(ref) + '&utm_medium=link';
       gtag('event', 'personal_link_visit', { ref: ref });
     }
   }

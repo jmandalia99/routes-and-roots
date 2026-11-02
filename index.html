@@ -13,7 +13,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Tiro+Devanagari+Sanskrit&family=Yatra+One&display=swap" rel="stylesheet">
 
-<!-- Google Analytics: Routes & Roots property (see analytics.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WFGB7D2MBZ"></script>
 <script src="analytics.js"></script>
 
@@ -62,19 +61,22 @@ img,svg{display:block}
 .hero .dots{position:absolute;inset:0;opacity:.18;pointer-events:none;
   background-image:radial-gradient(rgba(243,201,105,.9) 1.2px,transparent 1.6px);background-size:28px 28px;
   -webkit-mask-image:radial-gradient(circle at 70% 45%,#000,transparent 70%);mask-image:radial-gradient(circle at 70% 45%,#000,transparent 70%)}
-.mandala{position:absolute;right:-180px;top:50%;width:min(980px,120vw);aspect-ratio:1;transform:translateY(-50%);opacity:.55;pointer-events:none}
-.mandala svg{width:100%;height:100%;animation:spin 140s linear infinite;will-change:transform}
-.mandala .ring2{animation:spinr 90s linear infinite;transform-origin:50% 50%}
+.mandala{position:absolute;top:54%;right:max(3vw,calc((100vw - 1240px) / 2));width:min(540px,44vw);aspect-ratio:1;transform:translateY(-50%);opacity:.78;pointer-events:none}
+.mandala svg{display:block;width:100%;height:100%;animation:spin 160s linear infinite;transform-origin:50% 50%;will-change:transform}
+/* the inner lotus turns the other way around its own centre */
+.mandala .ring2{animation:spinr 110s linear infinite;transform-box:fill-box;transform-origin:center}
+@media(max-width:900px){.mandala{right:50%;top:42%;width:min(520px,94vw);transform:translate(50%,-50%);opacity:.2}}
 @keyframes spin{to{transform:rotate(360deg)}}
-.hero.paused .mandala svg,.hero.paused .mandala .ring2,.hero.paused .petal,.hero.paused .ghungroo .bell{animation-play-state:paused}
+.hero.paused .mandala svg,.hero.paused .mandala .ring2,.hero.paused .petal,.hero.paused .ghungroo .bell,.hero.paused .ghungroo .leaf{animation-play-state:paused}
 @keyframes spinr{to{transform:rotate(-360deg)}}
 .petals{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .petal{position:absolute;top:-40px;width:14px;height:20px;border-radius:60% 60% 50% 50%/70% 70% 40% 40%;
   background:radial-gradient(circle at 40% 35%,#FFD166,#F08A24 70%);opacity:.85;animation:fall linear infinite}
 .petal.r{background:radial-gradient(circle at 40% 35%,#FF8FA3,#C1121F 70%)}
+.petal.j{background:radial-gradient(circle at 40% 30%,#FFFFFF,#F1E6CF 75%);border-radius:50% 50% 45% 45%/75% 75% 30% 30%;opacity:.9}
 @keyframes fall{0%{transform:translate3d(0,-40px,0) rotate(0)}100%{transform:translate3d(var(--dx,60px),110vh,0) rotate(var(--rot,540deg))}}
 
-.hero-inner{position:relative;z-index:2;padding:120px 0 150px;max-width:760px}
+.hero-inner{position:relative;z-index:2;padding:178px 0 120px;max-width:760px}
 .deva{font-family:var(--deva);font-size:clamp(56px,10vw,128px);line-height:1;color:var(--gold-hi);
   text-shadow:0 0 40px rgba(243,201,105,.35),0 2px 0 rgba(0,0,0,.25);margin:0}
 .hero h1{font-family:var(--display);font-weight:600;font-size:clamp(46px,7.6vw,96px);line-height:.95;margin:14px 0 0;letter-spacing:-.01em}
@@ -91,13 +93,17 @@ img,svg{display:block}
 .btn.maroon:hover{background:var(--red);transform:translateY(-2px)}
 
 /* ghungroo string */
-.ghungroo{position:absolute;left:0;right:0;top:70px;z-index:3;height:120px;cursor:pointer}
-.ghungroo svg{width:100%;height:100%}
+.ghungroo{position:absolute;left:0;right:0;top:66px;z-index:3;height:118px;cursor:pointer}
+.ghungroo svg{display:block;width:100%;height:100%;overflow:visible}
 .ghungroo .bell{transform-box:fill-box;transform-origin:50% 0;animation:sway 3.4s ease-in-out infinite alternate}
+.ghungroo .leaf{transform-box:fill-box;transform-origin:50% 0;animation:leafsway 4.6s ease-in-out infinite alternate}
 .ghungroo.ring .bell{animation:jingle .55s ease-in-out 3 alternate}
+.ghungroo.ring .leaf{animation:leafjig .4s ease-in-out 3 alternate}
+@keyframes leafsway{from{transform:rotate(-2.5deg)}to{transform:rotate(2.5deg)}}
+@keyframes leafjig{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
 @keyframes sway{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
 @keyframes jingle{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
-.hint{position:absolute;right:22px;top:178px;z-index:3;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:rgba(243,201,105,.7);pointer-events:none}
+.hint{position:absolute;right:22px;top:160px;z-index:3;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:rgba(243,201,105,.7);pointer-events:none}
 @media(max-width:700px){.hint{display:none}.ghungroo{height:90px}}
 
 /* temple border band */
@@ -192,13 +198,14 @@ h2 em{font-style:italic;color:var(--red)}
 
 /* instagram band */
 .insta{position:relative;overflow:hidden;color:#fff;
-  background:linear-gradient(120deg,#F58529,#DD2A7B 45%,#8134AF 75%,#515BD4)}
+  background:linear-gradient(120deg,var(--maroon-800),var(--maroon) 45%,var(--red))}
 .insta .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:26px;padding-top:70px;padding-bottom:70px;position:relative;z-index:2}
-.insta h2{color:#fff;font-size:clamp(34px,4.6vw,56px)}
-.insta p{margin:10px 0 0;font-size:18px;color:rgba(255,255,255,.9)}
-.insta .btn{background:#fff;color:#8134AF}
+.insta h2{color:var(--cream);font-size:clamp(34px,4.6vw,56px)}
+.insta p{margin:10px 0 0;font-size:18px;color:rgba(255,244,223,.85)}
+.insta .btn{background:linear-gradient(135deg,var(--gold-hi),var(--gold));color:var(--maroon-800)}
 .insta .btn:hover{transform:translateY(-2px)}
-.insta .rings{position:absolute;right:-120px;top:50%;width:520px;height:520px;transform:translateY(-50%);opacity:.25}
+.insta .rings{position:absolute;right:max(4vw,calc((100vw - 1240px) / 2));top:50%;width:230px;height:230px;transform:translateY(-50%);opacity:.22}
+@media(max-width:700px){.insta .rings{display:none}}
 
 /* footer */
 footer{background:var(--maroon-900);color:rgba(255,244,223,.75);font-size:14.5px}
@@ -212,7 +219,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
 
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .mandala svg,.mandala .ring2,.petal,.ghungroo .bell,.flame{animation:none!important}
+  .mandala svg,.mandala .ring2,.petal,.ghungroo .bell,.ghungroo .leaf,.flame{animation:none!important}
   .petals{display:none}
   .rv{opacity:1;transform:none;transition:none}
 }
@@ -269,10 +276,10 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
   <div class="glow" id="glow"></div>
   <div class="petals" id="petals" aria-hidden="true"></div>
 
-  <div class="ghungroo" id="ghungroo" role="button" tabindex="0" aria-label="Ring the ghungroo">
-    <svg viewBox="0 0 1200 120" preserveAspectRatio="none" id="ghSvg"></svg>
+  <div class="ghungroo" id="ghungroo" role="button" tabindex="0" aria-label="Ring the temple bells">
+    <svg id="ghSvg"></svg>
   </div>
-  <div class="hint">Tap the ghungroo</div>
+  <div class="hint">Tap the bells</div>
 
   <div class="wrap" style="width:100%">
     <div class="hero-inner">
@@ -458,7 +465,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
 
 <!-- ═══════════ INSTAGRAM ═══════════ -->
 <section class="insta">
-  <svg class="rings" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#fff"><circle cx="100" cy="100" r="30"/><circle cx="100" cy="100" r="50"/><circle cx="100" cy="100" r="70"/><circle cx="100" cy="100" r="90"/></g></svg>
+  <svg class="rings" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#F3C969"><circle cx="100" cy="100" r="30"/><circle cx="100" cy="100" r="50"/><circle cx="100" cy="100" r="70"/><circle cx="100" cy="100" r="90"/></g></svg>
   <div class="wrap">
     <div>
       <h2>Follow the journey</h2>
@@ -522,16 +529,27 @@ if('IntersectionObserver' in window){
 } else rv.forEach(function(x){ x.classList.add('in'); });
 
 
-/* mandala (kolam-like rings of petals and dots) */
+/* kolam: a lotus drawn in gold lines, ringed with pulli (dots) — fully inside its box */
 (function(){
-  var m = document.getElementById('mandala'), g1 = el('g', {}, m), g2 = el('g', {'class':'ring2'}, m);
-  var gold='#F3C969', gold2='#D4A537', red='#C1121F';
-  function petals(g, n, r, w, h, fill, op){ for(var i=0;i<n;i++){ var a=360/n*i; el('ellipse',{cx:0,cy:-r,rx:w,ry:h,fill:fill,'fill-opacity':op,transform:'rotate('+a+')'},g);} }
-  function dots(g, n, r, rad, fill){ for(var i=0;i<n;i++){ var a=2*Math.PI*i/n; el('circle',{cx:(Math.cos(a)*r).toFixed(1),cy:(Math.sin(a)*r).toFixed(1),r:rad,fill:fill},g);} }
-  function ring(g, r, sw, col, dash){ el('circle',{r:r,fill:'none',stroke:col,'stroke-width':sw,'stroke-dasharray':dash||'none','stroke-opacity':.8},g); }
-  ring(g1,470,1.5,gold2); dots(g1,72,450,3,gold); petals(g1,36,400,14,44,gold2,.35); ring(g1,350,1,gold,'4 8');
-  petals(g2,24,290,22,60,red,.45); dots(g2,48,230,4,gold); ring(g2,210,2,gold2);
-  petals(g1,16,160,26,62,gold,.35); dots(g1,16,95,6,red); ring(g1,70,1.5,gold); petals(g2,8,40,12,30,gold,.6); el('circle',{r:12,fill:gold},g1);
+  var m = document.getElementById('mandala'), outer = el('g', {}, m), inner = el('g', {'class':'ring2'}, m);
+  var gold='#F3C969', gold2='#D4A537', red='#C1121F', cream='#FFF4DF';
+  function lotus(g, n, r0, r1, w, stroke, sw, fill, fop, rot){
+    var mid=-(r0+r1)/2;
+    for(var i=0;i<n;i++){ el('path',{d:'M0 '+(-r0)+' Q'+w+' '+mid+' 0 '+(-r1)+' Q'+(-w)+' '+mid+' 0 '+(-r0)+'Z',fill:fill||'none','fill-opacity':fop||0,stroke:stroke,'stroke-width':sw,'stroke-linejoin':'round',transform:'rotate('+((rot||0)+360/n*i)+')'},g); }
+  }
+  function dots(g, n, r, rad, fill, rot){ for(var i=0;i<n;i++){ var a=2*Math.PI*i/n+(rot||0); el('circle',{cx:(Math.cos(a)*r).toFixed(1),cy:(Math.sin(a)*r).toFixed(1),r:rad,fill:fill},g);} }
+  function ring(g, r, sw, col, dash, op){ el('circle',{r:r,fill:'none',stroke:col,'stroke-width':sw,'stroke-dasharray':dash||'none','stroke-opacity':op||.85},g); }
+  ring(outer,478,2,gold2); dots(outer,72,462,3.2,gold);
+  lotus(outer,36,404,446,19,gold,1.8);
+  ring(outer,396,1.2,gold,'3 9'); dots(outer,36,380,5,gold2,Math.PI/36);
+  lotus(outer,16,212,362,62,gold,2.2,red,.22);
+  lotus(outer,16,236,334,30,gold2,1.3,null,0,11.25);
+  dots(outer,16,350,4,cream,Math.PI/16);
+  ring(inner,202,2.2,gold); dots(inner,48,188,2.6,gold2);
+  lotus(inner,8,58,176,54,gold,2.4,gold,.12);
+  lotus(inner,8,78,150,28,cream,1.3,null,0,22.5);
+  ring(inner,50,1.8,gold);
+  for(var a=-2;a<=2;a++) for(var b=-2;b<=2;b++){ if(Math.abs(a)+Math.abs(b)>2) continue; var x=(a-b)*12, y=(a+b)*12, c=(a===0&&b===0); el('circle',{cx:x,cy:y,r:c?7:3.2,fill:c?gold:gold2},inner); }
 })();
 
 /* pointer glow on hero */
@@ -546,9 +564,9 @@ if('IntersectionObserver' in window){
 /* marigold petals */
 (function(){
   if(RM) return;
-  var box=document.getElementById('petals'), n = window.innerWidth < 700 ? 9 : 16;
+  var box=document.getElementById('petals'), n = window.innerWidth < 700 ? 8 : 14;
   for(var i=0;i<n;i++){
-    var p=document.createElement('span'); p.className='petal'+(i%3===0?' r':'');
+    var p=document.createElement('span'); p.className='petal'+(i%4===0?' r':i%4===2?' j':'');
     p.style.left=(Math.random()*100)+'%';
     p.style.animationDuration=(11+Math.random()*10)+'s';
     p.style.animationDelay=(-Math.random()*20)+'s';
@@ -582,20 +600,43 @@ function tick(kind){
   o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+0.11);
 }
 
-/* ghungroo string */
+/* thoranam: mango leaves and marigolds on a string, with brass bells to ring */
 (function(){
   var svg=document.getElementById('ghSvg'), wrap=document.getElementById('ghungroo');
-  el('path',{d:'M0 14 Q600 70 1200 14',fill:'none',stroke:'#F3C969','stroke-width':2.4,'stroke-opacity':.85},svg);
-  el('path',{d:'M0 20 Q600 76 1200 20',fill:'none',stroke:'#C1121F','stroke-width':1.6,'stroke-opacity':.7},svg);
-  var n = 26;
-  for(var i=1;i<n;i++){
-    var x=1200*i/n, y=14+56*(1-Math.pow((x-600)/600,2));
-    var g=el('g',{'class':'bell'},svg); g.style.animationDelay=(-(i%7)*0.45)+'s';
-    el('line',{x1:x,y1:y,x2:x,y2:y+8,stroke:'#D4A537','stroke-width':1.4},g);
-    el('circle',{cx:x,cy:y+17,r:9,fill:'url(#bellG)',stroke:'#9C7420','stroke-width':1},g);
-    el('path',{d:'M'+(x-4.5)+' '+(y+19)+' h9',stroke:'#6B0F1A','stroke-width':1.6,'stroke-linecap':'round'},g);
-    el('circle',{cx:x-3,cy:y+13.5,r:2,fill:'#FFF6D6','fill-opacity':.9},g);
+  function draw(){
+    while(svg.lastChild) svg.removeChild(svg.lastChild);
+    var W=Math.max(320, wrap.clientWidth), H=wrap.clientHeight||118, small=W<700;
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    var sag=small?10:16, top=8, step=small?26:34, L=small?36:48, lw=small?9:12;
+    function yAt(x){ var u=(x-W/2)/(W/2); return top+sag*(1-u*u); }
+    var d='M0 '+top; for(var x=0;x<=W;x+=20) d+=' L'+x+' '+yAt(x).toFixed(1);
+    d+=' L'+W+' '+top;
+    el('path',{d:d,fill:'none',stroke:'#D4A537','stroke-width':2.4},svg);
+    var n=Math.floor(W/step), off=(W-(n-1)*step)/2;
+    for(var i=0;i<n;i++){
+      var cx=off+i*step, y=yAt(cx)+1;
+      if(i%6===3){ // a brass bell on a longer cord
+        var g=el('g',{'class':'bell'},svg); g.style.animationDelay=(-(i%5)*0.5)+'s';
+        var cord=small?18:26, br=small?7:9.5, by=y+cord;
+        el('line',{x1:cx,y1:y,x2:cx,y2:by,stroke:'#D4A537','stroke-width':1.4},g);
+        el('path',{d:'M'+(cx-br)+' '+(by+br*1.5)+' Q'+(cx-br)+' '+by+' '+cx+' '+by+' Q'+(cx+br)+' '+by+' '+(cx+br)+' '+(by+br*1.5)+' Z',fill:'url(#bellG)',stroke:'#9C7420','stroke-width':1},g);
+        el('rect',{x:cx-br-1.5,y:by+br*1.5-1,width:2*br+3,height:3,rx:1.5,fill:'#B8862B'},g);
+        el('circle',{cx:cx,cy:by+br*1.5+3,r:2.4,fill:'#9C7420'},g);
+      } else if(i%2===0){ // mango leaf
+        var lg=el('g',{'class':'leaf'},svg); lg.style.animationDelay=(-(i%7)*0.6)+'s';
+        var len=L*(0.9+((i*37)%10)/50), col=(i%4===0)?'#2E7D4F':'#3E9B5F';
+        el('path',{d:'M'+cx+' '+y+' C'+(cx+lw)+' '+(y+len*0.3)+' '+(cx+lw*0.7)+' '+(y+len*0.75)+' '+cx+' '+(y+len)+' C'+(cx-lw*0.7)+' '+(y+len*0.75)+' '+(cx-lw)+' '+(y+len*0.3)+' '+cx+' '+y+' Z',fill:col},lg);
+        el('path',{d:'M'+cx+' '+(y+2)+' L'+cx+' '+(y+len-3),stroke:'#1F5C38','stroke-width':1,'stroke-opacity':.7},lg);
+      } else { // marigold
+        var fy=y+(small?7:9), fr=small?6:8;
+        for(var k=0;k<8;k++){ var a=Math.PI*2*k/8; el('circle',{cx:(cx+Math.cos(a)*fr*0.55).toFixed(1),cy:(fy+Math.sin(a)*fr*0.55).toFixed(1),r:fr*0.55,fill:(k%2?'#F08A24':'#F6A93B')},svg); }
+        el('circle',{cx:cx,cy:fy,r:fr*0.45,fill:'#FBC93D'},svg);
+        el('circle',{cx:cx,cy:fy,r:fr*0.18,fill:'#D9731A'},svg);
+      }
+    }
   }
+  draw();
+  var t=0; window.addEventListener('resize', function(){ clearTimeout(t); t=setTimeout(draw,150); });
   function ring(){ jingle(); wrap.classList.remove('ring'); void wrap.offsetWidth; wrap.classList.add('ring'); track('ghungroo_ring'); }
   wrap.addEventListener('click', ring);
   wrap.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); ring(); } });
