@@ -13,14 +13,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Tiro+Devanagari+Sanskrit&family=Yatra+One&display=swap" rel="stylesheet">
 
-<!-- Google Analytics (same property as jinalmandalia.com). Open this site once with ?me=1 to stop counting your own visits. -->
+<!-- Google Analytics (same property as jinalmandalia.com) — see analytics.js -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9VRVWW9YJ"></script>
-<script>
-(function(){var ID='G-P9VRVWW9YJ',q=null;try{q=new URLSearchParams(location.search)}catch(e){}
-try{if(q&&q.get('me')==='1')localStorage.setItem('jm_owner','1');if(q&&q.get('me')==='0')localStorage.removeItem('jm_owner');if(localStorage.getItem('jm_owner')==='1')window['ga-disable-'+ID]=true;}catch(e){}
-window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments)}window.gtag=gtag;gtag('js',new Date());gtag('config',ID);
-if(q&&q.has('me')){try{q.delete('me');var s=q.toString();history.replaceState(null,'',location.pathname+(s?'?'+s:'')+location.hash)}catch(e){}}})();
-</script>
+<script src="analytics.js"></script>
 
 <style>
 :root{
@@ -223,7 +218,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
 }
 </style>
 </head>
-<body>
+<body data-sections>
 
 <!-- shared SVG patterns -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -262,7 +257,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
       <a class="opt" href="#journey">Journey</a>
       <a class="opt" href="#taal">Taal</a>
       <a class="opt" href="#tools">Tools</a>
-      <a class="home" href="https://www.jinalmandalia.com/">Main site ↗</a>
+      <a class="home" href="https://www.jinalmandalia.com/" data-ev="main_site_click" data-from="top_bar">Main site ↗</a>
     </nav>
   </div>
 </header>
@@ -287,7 +282,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
       <p class="lead rv" style="--d:220ms">The classical dance I grew up with, the rhythm I'm relearning, and the tools I'm building to bring technology into it.</p>
       <div class="cta rv" style="--d:300ms">
         <a class="btn gold" href="#tools">Try the tools ↓</a>
-        <a class="btn line" href="https://www.instagram.com/routes._.roots/" target="_blank" rel="noopener noreferrer" data-ev="instagram_click">
+        <a class="btn line" href="https://www.instagram.com/routes._.roots/" target="_blank" rel="noopener noreferrer" data-ev="instagram_click" data-from="hero">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
           @routes._.roots
         </a>
@@ -469,7 +464,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
       <h2>Follow the journey</h2>
       <p>Practice, rhythm, and new tools — on Instagram.</p>
     </div>
-    <a class="btn" href="https://www.instagram.com/routes._.roots/" target="_blank" rel="noopener noreferrer" data-ev="instagram_click">
+    <a class="btn" href="https://www.instagram.com/routes._.roots/" target="_blank" rel="noopener noreferrer" data-ev="instagram_click" data-from="instagram_band">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
       @routes._.roots
     </a>
@@ -480,7 +475,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
 <footer>
   <div class="wrap">
     <span><span class="om">॥</span> Routes &amp; Roots · Bharatanatyam by Jinal Mandalia <span class="om">॥</span></span>
-    <span>Work &amp; career: <a href="https://www.jinalmandalia.com/">www.jinalmandalia.com</a></span>
+    <span>Work &amp; career: <a href="https://www.jinalmandalia.com/" data-ev="main_site_click" data-from="footer">www.jinalmandalia.com</a></span>
   </div>
 </footer>
 
@@ -489,7 +484,7 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
 (function(){
 'use strict';
 var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-var track = function(name, params){ try{ if(window.gtag) window.gtag('event', name, params||{}); }catch(e){} };
+var track = function(name, params){ if(window.jmTrack) window.jmTrack(name, params); };
 var NS = 'http://www.w3.org/2000/svg';
 function el(tag, attrs, parent){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k, attrs[k]); if(parent) parent.appendChild(e); return e; }
 
@@ -526,10 +521,6 @@ if('IntersectionObserver' in window){
   rv.forEach(function(x){ io.observe(x); });
 } else rv.forEach(function(x){ x.classList.add('in'); });
 
-/* analytics on links */
-document.querySelectorAll('[data-ev]').forEach(function(a){
-  a.addEventListener('click', function(){ track(a.getAttribute('data-ev'), a.getAttribute('data-tool') ? {tool:a.getAttribute('data-tool')} : {from:'dance_site'}); });
-});
 
 /* mandala (kolam-like rings of petals and dots) */
 (function(){

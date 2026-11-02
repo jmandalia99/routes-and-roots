@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HASTA Trainer — Record Your Hastas</title>
+<title>Hasta Trainer — Routes &amp; Roots</title>
 <meta name="description" content="Record your own Bharatanatyam hastas with your camera and build a personal hand-gesture model. Everything runs in your browser. By Jinal Mandalia.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9VRVWW9YJ"></script>
-<script>(function(){var ID='G-P9VRVWW9YJ';try{if(localStorage.getItem('jm_owner')==='1')window['ga-disable-'+ID]=true;}catch(e){}window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config',ID);})();</script>
+<script src="../analytics.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
@@ -115,6 +115,7 @@ a{color:inherit}
 .links{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px;font-size:14px}
 .links a{color:var(--gold-hi);text-decoration:none;border-bottom:1px solid rgba(243,201,105,.4)}
 .temple{position:absolute;left:0;right:0;bottom:0;height:26px;width:100%;display:block}
+.cam-err{margin:14px 0 0;padding:10px 14px;border-radius:12px;background:rgba(193,18,31,.18);border:1px solid rgba(243,201,105,.35);color:#FFE7C2;font-size:14px;line-height:1.5}
 
 @media(max-width:820px){
   #app{flex-direction:column-reverse}
@@ -135,9 +136,10 @@ a{color:inherit}
       <li><b>3</b><span>Record 3–5 samples of each, then export your model and open it in the Hasta Performer.</span></li>
     </ol>
     <button id="sBtn">Begin recording</button>
+      <p id="camErr" class="cam-err" role="alert" hidden></p>
     <p class="small">Needs a camera and works best in Chrome. Nothing is uploaded — everything stays on your device.</p>
     <div class="links">
-      <a href="../hasta-performer/">Already have a model? Open Hasta Performer</a>
+      <a href="../hasta-performer/" data-ev="performer_open" data-from="trainer_start">Already have a model? Open Hasta Performer</a>
       <a href="../">Back to Routes &amp; Roots</a>
     </div>
   </div>
@@ -353,7 +355,7 @@ function buildList(){
     const div=document.createElement('div');
     div.className='hItem'+(selectedKey===h.key?' active':'')+(done?' done':'');
     div.id='hi_'+h.key;
-    div.innerHTML=`<span class="hNum">${h.n}.</span><span class="hDev">${h.dev}</span><span class="hRom">${h.rom}</span><span class="hStatus">${count>0?count+'✓':''}</span>`;
+    div.innerHTML=`<span class="hNum">${h.n}.</span><span class="hDev">${h.dev}</span><span class="hRom">${h.rom}</span><span class="hStatus">${count>0?count:''}</span>`;
     div.onclick=()=>selectHasta(h.key);
     list.appendChild(div);
   });
@@ -470,7 +472,8 @@ function captureNow(){
     vec = normaliseLandmarks(currentHands[0]);
   } else {
     // Missed — no hands at capture moment
-    endRecord(needTwo ? '⚠ Both hands not visible at capture — try again' : '⚠ Hand not visible at capture — try again');
+    endRecord(needTwo ? 'Both hands weren’t visible at capture — try again' : 'Your hand wasn’t visible at capture — try again');
+    if(window.jmTrack) window.jmTrack('trainer_sample_missed',{hasta:h.rom});
     return;
   }
 
@@ -484,8 +487,12 @@ function captureNow(){
 
   const count = model[selectedKey].length;
   endRecord(count >= SAMPLES_NEEDED
-    ? `✓ ${count} samples — looking great!`
-    : `✓ Sample ${count} saved · ${SAMPLES_NEEDED - count} more needed`);
+    ? `${count} samples saved — looking great`
+    : `Sample ${count} saved · ${SAMPLES_NEEDED - count} more needed`);
+  if(window.jmTrackOnce){
+    window.jmTrackOnce('trainer_first_sample',{hasta:h.rom});
+    if(count === SAMPLES_NEEDED) window.jmTrackOnce('trainer_hasta_done',{hasta:h.rom,type:needTwo?'samyuta':'asamyuta'},selectedKey);
+  }
   updateDots();
   updateProgress();
   buildList();
@@ -538,7 +545,8 @@ function exportModel(){
   a.href=URL.createObjectURL(blob);
   a.download='hasta-model.json';
   a.click();
-  document.getElementById('recFeedback').innerHTML='✓ Model exported! Load it in <a href="../hasta-performer/" target="_blank" rel="noopener" >HASTA Performer</a>.';
+  document.getElementById('recFeedback').innerHTML='Model saved. Load it in the <a href="../hasta-performer/" target="_blank" rel="noopener" data-ev="performer_open" data-from="trainer_export">Hasta Performer</a>.';
+  if(window.jmTrack) window.jmTrack('trainer_export',{hastas:Object.keys(export_data.hastas).length});
 }
 
 // ═══════════════════════════════════════════════
@@ -600,7 +608,13 @@ async function boot(){
 
   let stream;
   try{stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:1280},height:{ideal:720},facingMode:'user'},audio:false});}
-  catch(e){return;}
+  catch(e){
+    const m=document.getElementById('camErr');
+    if(m){m.textContent=(e&&e.name==='NotFoundError')?'No camera was found on this device.':'The camera didn’t start. Allow camera access for this site in your browser, then try again.';m.hidden=false;}
+    if(window.jmTrack) window.jmTrack('trainer_camera_error',{error:(e&&e.name)||'unknown'});
+    return;
+  }
+  if(window.jmTrack) window.jmTrack('trainer_camera_on');
   vid.srcObject=stream;
   await new Promise(r2=>vid.onloadedmetadata=r2);
   vid.play();vid.classList.add('live');

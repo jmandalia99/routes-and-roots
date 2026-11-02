@@ -8,7 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <!-- Google Analytics (same property as jinalmandalia.com) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9VRVWW9YJ"></script>
-<script>(function(){var ID='G-P9VRVWW9YJ';try{if(localStorage.getItem('jm_owner')==='1')window['ga-disable-'+ID]=true;}catch(e){}window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config',ID);})();</script>
+<script src="../analytics.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
@@ -195,7 +195,7 @@
   <pattern id="templePat" width="48" height="28" patternUnits="userSpaceOnUse"><rect width="48" height="28" fill="#2E070C"/><path d="M0 28 L9 20 L13 20 L18 12 L22 12 L24 5 L26 12 L30 12 L35 20 L39 20 L48 28 Z" fill="#D4A537"/><path d="M17 28 L24 20 L31 28 Z" fill="#6B0F1A"/><circle cx="24" cy="2.6" r="1.8" fill="#F3C969"/></pattern>
 </defs></svg>
 <div class="top"><div class="in">
-  <a class="brand" href="../"><svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#6B0F1A"/><path d="M10 20 Q32 36 54 20" fill="none" stroke="#F3C969" stroke-width="3" stroke-linecap="round"/><g fill="#F3C969" stroke="#9C7420" stroke-width="1.2"><circle cx="18" cy="34" r="6.5"/><circle cx="32" cy="40" r="7.5"/><circle cx="46" cy="34" r="6.5"/></g></svg>Routes <em>&amp;</em> Roots</a>
+  <a class="brand" href="../" data-ev="dance_home_click" data-from="taal"><svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#6B0F1A"/><path d="M10 20 Q32 36 54 20" fill="none" stroke="#F3C969" stroke-width="3" stroke-linecap="round"/><g fill="#F3C969" stroke="#9C7420" stroke-width="1.2"><circle cx="18" cy="34" r="6.5"/><circle cx="32" cy="40" r="7.5"/><circle cx="46" cy="34" r="6.5"/></g></svg>Routes <em>&amp;</em> Roots</a>
   <nav><a href="../#tools">All tools</a></nav>
 </div></div>
 
@@ -406,7 +406,7 @@
 <svg class="temple" preserveAspectRatio="none" aria-hidden="true" style="transform:scaleY(-1)"><rect width="100%" height="100%" fill="url(#templePat)"/></svg>
 <footer><div class="in">
   <span>Three angas · five jatis · seven talas · five gatis — one hundred and seventy-five cycles. The sam always comes home.</span>
-  <span>Made by <a href="https://www.jinalmandalia.com/">Jinal Mandalia</a> · <a href="https://www.instagram.com/routes._.roots/" target="_blank" rel="noopener noreferrer">@routes._.roots</a></span>
+  <span>Made by <a href="https://www.jinalmandalia.com/" data-ev="main_site_click" data-from="taal">Jinal Mandalia</a> · <a href="https://www.instagram.com/routes._.roots/" target="_blank" rel="noopener noreferrer" data-ev="instagram_click" data-from="taal">@routes._.roots</a></span>
 </div></footer>
 
 <script src="../lenis.min.js"></script>
@@ -493,17 +493,20 @@ TALA_ORDER.forEach(tk=>{
   rows+=r+'</tr>';
 });
 grid.innerHTML=head+rows;
+const ev=(n,p)=>{if(window.jmTrack)window.jmTrack(n,p);};
+const cycInfo=()=>({tala:TALAS[curT].name,jaati:JATIS[curJ].name});
 grid.querySelectorAll('.cell').forEach(c=>c.onclick=()=>{
   setCycle(c.dataset.t,c.dataset.j);
+  ev('taal_select',{...cycInfo(),from:'chart'});
   const pr=document.querySelector('.practice');
   if(window.__lenis) window.__lenis.scrollTo(pr,{offset:-80,duration:1.1}); else pr.scrollIntoView({behavior:'smooth',block:'center'});
 });
 
 /* ---- SELECTORS ---- */
 const talaOpts=document.getElementById('talaOpts'),jaatiOpts=document.getElementById('jaatiOpts'),gatiOpts=document.getElementById('gatiOpts');
-TALA_ORDER.forEach(tk=>{const b=document.createElement('button');b.className='opt';b.textContent=TALAS[tk].name;b.dataset.t=tk;b.onclick=()=>setCycle(tk,curJ);talaOpts.appendChild(b);});
-JATI_ORDER.forEach(jk=>{const b=document.createElement('button');b.className='opt';b.textContent=JATIS[jk].name;b.dataset.j=jk;b.onclick=()=>setCycle(curT,jk);jaatiOpts.appendChild(b);});
-JATI_ORDER.forEach(gk=>{const b=document.createElement('button');b.className='opt';b.textContent=JATIS[gk].name;b.dataset.g=gk;b.onclick=()=>selectGati(gk);gatiOpts.appendChild(b);});
+TALA_ORDER.forEach(tk=>{const b=document.createElement('button');b.className='opt';b.textContent=TALAS[tk].name;b.dataset.t=tk;b.onclick=()=>{setCycle(tk,curJ);ev('taal_select',{...cycInfo(),from:'tala'});};talaOpts.appendChild(b);});
+JATI_ORDER.forEach(jk=>{const b=document.createElement('button');b.className='opt';b.textContent=JATIS[jk].name;b.dataset.j=jk;b.onclick=()=>{setCycle(curT,jk);ev('taal_select',{...cycInfo(),from:'jaati'});};jaatiOpts.appendChild(b);});
+JATI_ORDER.forEach(gk=>{const b=document.createElement('button');b.className='opt';b.textContent=JATIS[gk].name;b.dataset.g=gk;b.onclick=()=>{selectGati(gk);ev('taal_gati',{gati:JATIS[gk].name});};gatiOpts.appendChild(b);});
 
 function paint(){
   [...talaOpts.children].forEach(b=>b.classList.toggle('on',b.dataset.t===curT));
@@ -520,6 +523,7 @@ speedSel.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
   curSpeed=+b.dataset.s;
   [...speedSel.children].forEach(x=>x.classList.toggle('on',x===b));
   render();
+  ev('taal_speed',{speed:curSpeed});
 });
 
 /* ---- RENDER ---- */
@@ -633,7 +637,7 @@ function stop(keep){
   if(!keep)tickIdx=0;
   clearMarks();
 }
-playBtn.onclick=()=>{if(playing)stop();else{if(ac&&ac.resume)ac.resume();play();}};
+playBtn.onclick=()=>{if(playing)stop();else{if(ac&&ac.resume)ac.resume();play();ev('taal_play',{...cycInfo(),gati:JATIS[curG].name,speed:curSpeed,tempo:+tempo.value});}};
 
 /* init — gati always starts at Chatusra */
 curG=DEFAULT_GATI;setCycle('triputa','chatusra');

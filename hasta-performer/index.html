@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HASTA — Performer</title>
+<title>Hasta Performer — Routes &amp; Roots</title>
 <meta name="description" content="Perform Bharatanatyam hastas in front of your camera and see each one recognised live, with its name and viniyoga. By Jinal Mandalia.">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-P9VRVWW9YJ"></script>
-<script>(function(){var ID='G-P9VRVWW9YJ';try{if(localStorage.getItem('jm_owner')==='1')window['ga-disable-'+ID]=true;}catch(e){}window.dataLayer=window.dataLayer||[];function gtag(){window.dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config',ID);})();</script>
+<script src="../analytics.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
@@ -121,8 +121,8 @@ a{color:inherit}
     <button id="camBtn" onclick="startWithoutModel()">Try it without a model</button>
     <div id="modelStats">No model loaded</div>
     <div class="links">
-      <a href="../hasta-trainer/">No model yet? Record one in the Hasta Trainer</a>
-      <a href="../">Back to Routes &amp; Roots</a>
+      <a href="../hasta-trainer/" data-ev="trainer_open" data-from="performer">No model yet? Record one in the Hasta Trainer</a>
+      <a href="../" data-ev="dance_home_click" data-from="performer">Back to Routes &amp; Roots</a>
     </div>
   </div>
   <svg class="temple" preserveAspectRatio="none" aria-hidden="true"><defs><pattern id="tp" width="48" height="26" patternUnits="userSpaceOnUse"><rect width="48" height="26" fill="#2E070C"/><path d="M0 26 L9 18 L13 18 L18 11 L22 11 L24 4 L26 11 L30 11 L35 18 L39 18 L48 26 Z" fill="#D4A537"/><path d="M17 26 L24 18 L31 26 Z" fill="#6B0F1A"/></pattern></defs><rect width="100%" height="100%" fill="url(#tp)"/></svg>
@@ -248,7 +248,8 @@ function readModelFile(file){
       const data=JSON.parse(e.target.result);
       applyModel(data);
     }catch(err){
-      document.getElementById('modelStats').textContent='⚠ Invalid JSON file';
+      document.getElementById('modelStats').textContent='That file isn’t a hasta model — export one from the Hasta Trainer.';
+      if(window.jmTrack) window.jmTrack('performer_model_invalid');
     }
   };
   r.readAsText(file);
@@ -260,11 +261,13 @@ function applyModel(data){
   const samCount=hastaEntries.filter(h=>h.type==='samyuta').length;
   const totalSamples=hastaEntries.reduce((s,h)=>s+(h.samples||[]).length,0);
   document.getElementById('modelStats').textContent=
-    `✓ Model loaded · ${asaCount} asamyuta + ${samCount} samyuta · ${totalSamples} total samples`;
+    `Model loaded · ${asaCount} asamyuta + ${samCount} samyuta · ${totalSamples} samples`;
+  if(window.jmTrack) window.jmTrack('performer_model_loaded',{hastas:asaCount+samCount});
   startCamera();
 }
 function startWithoutModel(){
   document.getElementById('modelStats').textContent='Demo mode — load a hasta-model.json for accurate recognition';
+  if(window.jmTrack) window.jmTrack('performer_demo');
   startCamera();
 }
 
@@ -418,6 +421,7 @@ function updateRecognition(){
   if(pendingFrames>=CONFIRM_FRAMES&&result.key!==(confirmedHasta&&confirmedHasta.key)){
     confirmedHasta=result;
     updatePanel(result,handsCount);
+    if(window.jmTrackOnce) window.jmTrackOnce('performer_hasta',{hasta:result.roman||result.rom||result.key,hands:handsCount},result.key);
   }
 
   // Update confidence live
@@ -496,7 +500,14 @@ async function startCamera(){
 
   let stream;
   try{stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:1280},height:{ideal:720},facingMode:'user'},audio:false});}
-  catch(e){setDot('dCam','');return;}
+  catch(e){
+    setDot('dCam','');
+    const pill=document.getElementById('modePill');
+    if(pill){pill.className='modePill';pill.textContent=(e&&e.name==='NotFoundError')?'No camera found on this device':'Camera blocked — allow camera access for this site, then reload';}
+    if(window.jmTrack) window.jmTrack('performer_camera_error',{error:(e&&e.name)||'unknown'});
+    return;
+  }
+  if(window.jmTrack) window.jmTrack('performer_camera_on');
   vid.srcObject=stream;
   await new Promise(r2=>vid.onloadedmetadata=r2);
   vid.play();vid.classList.add('live');
