@@ -11,7 +11,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Tiro+Devanagari+Sanskrit&family=Tiro+Tamil&family=Yatra+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Tiro+Devanagari+Sanskrit&family=Yatra+One&display=swap" rel="stylesheet">
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WFGB7D2MBZ"></script>
 <script src="analytics.js"></script>
@@ -203,48 +203,12 @@ footer a{color:var(--gold-hi);text-decoration:none;border-bottom:1px solid rgba(
 footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
 
 /* reveal */
-/* aharya: the costume — a silk body with a mango (mangai) zari border */
-.aharya{background:radial-gradient(900px 520px at 85% 0%,rgba(193,18,31,.38),transparent 60%),linear-gradient(180deg,var(--maroon-800),var(--maroon-900));color:var(--cream);overflow:hidden}
-.aharya::before{content:"";position:absolute;inset:0;opacity:.07;pointer-events:none;background-image:radial-gradient(#F3C969 1.3px,transparent 1.7px);background-size:22px 22px}
-.aharya h2{color:var(--cream)} .aharya h2 em{color:var(--gold-hi)} .aharya .kick{color:var(--gold-hi)} .aharya .sub{color:rgba(255,244,223,.8)}
-.aharya-grid{position:relative;margin-top:50px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.piece{margin:0;position:relative;border-radius:22px;padding:16px 18px 20px;cursor:pointer;outline:none;
-  background:linear-gradient(180deg,rgba(255,244,223,.08),rgba(255,244,223,.02));border:1.5px solid rgba(243,201,105,.38);transition:transform .45s,border-color .45s,background .45s}
-.piece:hover,.piece:focus-visible{transform:translateY(-5px);border-color:rgba(243,201,105,.9);background:linear-gradient(180deg,rgba(255,244,223,.12),rgba(255,244,223,.03))}
-.piece svg{display:block;width:100%;height:auto;aspect-ratio:4/3;overflow:visible}
-.piece figcaption{margin-top:8px}
-.piece .ta{display:block;font-family:'Tiro Tamil',var(--deva),serif;font-size:15px;color:var(--gold)}
-.piece b{display:block;font-family:var(--display);font-size:27px;font-weight:600;line-height:1.1;color:var(--gold-hi)}
-.piece i{display:block;margin-top:3px;font-style:normal;font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,244,223,.6)}
-.piece p{margin:10px 0 0;font-size:14.5px;line-height:1.55;color:rgba(255,244,223,.82)}
-.fan{--sp:1.5deg}
-.fan .pleat{transform-box:view-box;transform-origin:120px 22px;transform:rotate(calc(var(--i) * var(--sp)));transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
-#pFan.open .fan{--sp:7deg}
-#pFan.open:hover .fan{--sp:7.6deg}
-.jh{transform-box:view-box;animation:jswing 3.2s ease-in-out infinite alternate}
-.jh.l{transform-origin:80px 19px} .jh.r{transform-origin:160px 19px;animation-delay:-1.6s}
-#pJhumka:hover .jh,#pJhumka:focus-visible .jh{animation-duration:.6s}
-@keyframes jswing{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
-#pBelt.open .glint,#pBelt.shine .glint,#pBelt:hover .glint{animation:glint 1.4s ease-in-out}
-@keyframes glint{0%{transform:skewX(-20deg) translateX(0);opacity:0}25%{opacity:.75}100%{transform:skewX(-20deg) translateX(330px);opacity:0}}
-.salangai .gb{transform-box:fill-box;transform-origin:50% 0}
-#pSalangai:hover .gb{animation:sway .5s ease-in-out infinite alternate}
-#pSalangai.ring .gb{animation:jingle .45s ease-in-out 3 alternate}
-.zari{height:36px} .zari svg{display:block;width:100%;height:100%}
-@media(max-width:1000px){.aharya-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){
-  .aharya-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:36px -22px 0;padding:4px 22px 10px;scroll-padding:0 22px;scrollbar-width:none}
-  .aharya-grid::-webkit-scrollbar{display:none}
-  .piece{flex:0 0 78%;scroll-snap-align:start}
-}
-
 .rv{opacity:0;transform:translateY(30px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
 .rv.in{opacity:1;transform:none}
 
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .petal,.ghungroo .bell,.flame,.jh,.gb,.glint{animation:none!important}
-  .fan .pleat{transition:none}
+  .petal,.ghungroo .bell,.flame{animation:none!important}
   .petals{display:none}
   .rv{opacity:1;transform:none;transition:none}
 }
@@ -255,36 +219,6 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
 <!-- shared SVG patterns -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <linearGradient id="goldG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7D77E"/><stop offset=".55" stop-color="#D4A537"/><stop offset="1" stop-color="#A57A26"/></linearGradient>
-    <linearGradient id="silkA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C1121F"/><stop offset="1" stop-color="#7A0F1C"/></linearGradient>
-    <linearGradient id="silkB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#97101F"/><stop offset="1" stop-color="#5A0A14"/></linearGradient>
-    <symbol id="jhumkaSym" viewBox="0 0 80 150">
-      <circle cx="40" cy="5" r="4" fill="none" stroke="#D4A537" stroke-width="1.8"/>
-      <circle cx="40" cy="22" r="13" fill="url(#goldG)" stroke="#9C7420"/>
-      <g fill="#FFF6E6"><circle cx="40" cy="9.6" r="1.9"/><circle cx="49.2" cy="13.2" r="1.9"/><circle cx="52.6" cy="22" r="1.9"/><circle cx="49.2" cy="30.8" r="1.9"/><circle cx="40" cy="34.4" r="1.9"/><circle cx="30.8" cy="30.8" r="1.9"/><circle cx="27.4" cy="22" r="1.9"/><circle cx="30.8" cy="13.2" r="1.9"/></g>
-      <circle cx="40" cy="22" r="6" fill="#C1121F" stroke="#F3C969"/>
-      <circle cx="38" cy="20" r="1.6" fill="#FFD6D6" opacity=".85"/>
-      <rect x="37" y="34" width="6" height="7" fill="#B8862B"/>
-      <path d="M40 40 C22 40 14 62 12 92 L68 92 C66 62 58 40 40 40 Z" fill="url(#goldG)" stroke="#9C7420"/>
-      <path d="M22 60 Q40 54 58 60 M16 76 Q40 69 64 76" fill="none" stroke="#9C7420" stroke-width="1.2"/>
-      <g fill="#1E7F5C" stroke="#F3C969" stroke-width=".6"><circle cx="22" cy="84" r="2.6"/><circle cx="31" cy="83" r="2.6"/><circle cx="49" cy="83" r="2.6"/><circle cx="58" cy="84" r="2.6"/></g>
-      <circle cx="40" cy="82.5" r="3.4" fill="#C1121F" stroke="#F3C969" stroke-width=".7"/>
-      <rect x="10" y="90" width="60" height="6" rx="3" fill="#B8862B"/>
-      <g fill="#FFF6E6" stroke="#E2CFA8" stroke-width=".6"><circle cx="14" cy="102" r="3.6"/><circle cx="20.5" cy="103" r="3.6"/><circle cx="27" cy="103.6" r="3.6"/><circle cx="33.5" cy="104" r="3.6"/><circle cx="40" cy="104.2" r="3.6"/><circle cx="46.5" cy="104" r="3.6"/><circle cx="53" cy="103.6" r="3.6"/><circle cx="59.5" cy="103" r="3.6"/><circle cx="66" cy="102" r="3.6"/>
-        <circle cx="27" cy="111" r="3"/><circle cx="40" cy="112" r="3.4"/><circle cx="53" cy="111" r="3"/><circle cx="40" cy="119" r="2.8"/></g>
-    </symbol>
-    <pattern id="mangaiPat" width="56" height="36" patternUnits="userSpaceOnUse">
-      <rect width="56" height="36" fill="#D4A537"/>
-      <rect width="56" height="3" fill="#9C7420"/><rect y="33" width="56" height="3" fill="#9C7420"/>
-      <rect y="5" width="56" height="1.2" fill="#6B0F1A"/><rect y="29.8" width="56" height="1.2" fill="#6B0F1A"/>
-      <g transform="translate(24 19) rotate(32) scale(0.205) translate(-50 -56)">
-        <path d="M50 6 C62 22 86 46 86 66 C86 86 70 98 50 98 C30 98 14 86 14 66 C14 46 40 26 50 6 Z" fill="#6B0F1A"/>
-        <path d="M50 6 C56 -4 70 -6 76 4" fill="none" stroke="#6B0F1A" stroke-width="7" stroke-linecap="round"/>
-        <path d="M50 34 C58 46 70 58 70 68 C70 80 61 86 50 86 C39 86 30 80 30 68 C30 58 44 46 50 34 Z" fill="none" stroke="#F3C969" stroke-width="5"/>
-        <circle cx="50" cy="70" r="7" fill="#F3C969"/>
-      </g>
-      <circle cx="48" cy="18" r="2.4" fill="#6B0F1A"/>
-    </pattern>
     <pattern id="templePat" width="48" height="30" patternUnits="userSpaceOnUse">
       <rect width="48" height="30" fill="#3E0A10"/>
       <path d="M0 30 L9 21 L13 21 L18 13 L22 13 L24 6 L26 13 L30 13 L35 21 L39 21 L48 30 Z" fill="#D4A537"/>
@@ -317,7 +251,6 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
     </a>
     <nav class="toplinks" aria-label="Sections">
       <a class="opt" href="#journey">Journey</a>
-      <a class="opt" href="#aharya">Costume</a>
       <a class="opt" href="#taal">Taal</a>
       <a class="opt" href="#tools">Tools</a>
       <a class="home" href="https://www.jinalmandalia.com/" data-ev="main_site_click" data-from="top_bar">Main site ↗</a>
@@ -428,67 +361,6 @@ footer .om{font-family:var(--deva);color:var(--gold);font-size:18px}
 </section>
 
 <div class="temple" aria-hidden="true"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="url(#templePat)"/></svg></div>
-
-<!-- ═══════════ AHARYA: THE COSTUME ═══════════ -->
-<section class="s aharya" id="aharya">
-  <div class="wrap">
-    <p class="kick rv">Aharya · the costume</p>
-    <h2 class="rv">Dressed in <em>silk &amp; gold</em></h2>
-    <p class="sub rv">Aharya — costume and jewellery — is one of the four ways a dancer expresses. These are the pieces that make the look.</p>
-    <div class="aharya-grid">
-
-      <figure class="piece rv" id="pFan" tabindex="0" data-piece="Visiri">
-        <svg viewBox="0 0 240 180" class="fan" aria-hidden="true">
-          <g class="pleats"></g>
-          <rect x="94" y="9" width="52" height="17" rx="4" fill="url(#goldG)" stroke="#9C7420"/>
-          <rect x="94" y="15" width="52" height="4" fill="#6B0F1A"/>
-          <circle cx="120" cy="17.5" r="4.2" fill="#C1121F" stroke="#F3C969" stroke-width="1.2"/>
-        </svg>
-        <figcaption><span class="ta">விசிறி</span><b>Visiri</b><i>Fan pleats</i>
-          <p>Pleats stitched between the knees that open like a fan when the dancer sits in aramandi.</p></figcaption>
-      </figure>
-
-      <figure class="piece rv" style="--d:90ms" id="pJhumka" tabindex="0" data-piece="Jhumka">
-        <svg viewBox="0 0 240 180" aria-hidden="true">
-          <g class="jh l"><use href="#jhumkaSym" x="40" y="14" width="80" height="150"/></g>
-          <g class="jh r"><use href="#jhumkaSym" x="120" y="14" width="80" height="150"/></g>
-        </svg>
-        <figcaption><span class="ta">ஜிமிக்கி</span><b>Jhumka</b><i>Temple jewellery</i>
-          <p>Gold kemp-stone jewellery — jhumkas, nethi chutti and the rest — modelled on temple ornaments.</p></figcaption>
-      </figure>
-
-      <figure class="piece rv" style="--d:180ms" id="pBelt" tabindex="0" data-piece="Oddiyanam">
-        <svg viewBox="0 0 240 180" aria-hidden="true">
-          <defs><clipPath id="beltClip"><path d="M8 70 Q120 92 232 70 L232 96 Q120 118 8 96 Z"/><ellipse cx="120" cy="98" rx="31" ry="35"/></clipPath></defs>
-          <path d="M8 70 Q120 92 232 70 L232 96 Q120 118 8 96 Z" fill="url(#goldG)" stroke="#9C7420"/>
-          <path d="M8 76 Q120 98 232 76 M8 90 Q120 112 232 90" fill="none" stroke="#6B0F1A" stroke-width="1.2"/>
-          <g class="belt-stones"></g>
-          <g class="belt-pearls"></g>
-          <ellipse cx="120" cy="98" rx="31" ry="35" fill="url(#goldG)" stroke="#9C7420" stroke-width="1.4"/>
-          <g class="belt-lotus"></g>
-          <circle cx="120" cy="98" r="9" fill="#C1121F" stroke="#F3C969" stroke-width="1.4"/>
-          <circle cx="117" cy="95" r="2.4" fill="#FFD6D6" opacity=".8"/>
-          <g clip-path="url(#beltClip)"><rect class="glint" x="-40" y="40" width="26" height="120" fill="#FFF8E1" opacity="0" transform="skewX(-20)"/></g>
-        </svg>
-        <figcaption><span class="ta">ஒட்டியாணம்</span><b>Oddiyanam</b><i>Waist belt</i>
-          <p>A gold belt that marks the waist, so every line of a pose reads clearly.</p></figcaption>
-      </figure>
-
-      <figure class="piece rv" style="--d:270ms" id="pSalangai" tabindex="0" data-piece="Salangai">
-        <svg viewBox="0 0 240 180" class="salangai" aria-hidden="true">
-          <path d="M30 70 C10 70 6 52 18 42 M30 110 C8 112 4 130 16 140 M210 70 C230 70 234 52 222 42 M210 110 C232 112 236 130 224 140" fill="none" stroke="#8A4A26" stroke-width="3" stroke-linecap="round"/>
-          <rect x="30" y="52" width="180" height="78" rx="14" fill="#5A1A12"/>
-          <rect x="35" y="57" width="170" height="68" rx="10" fill="none" stroke="#C9A46A" stroke-width="1.2" stroke-dasharray="3 3"/>
-          <g class="gbells"></g>
-        </svg>
-        <figcaption><span class="ta">சலங்கை</span><b>Salangai</b><i>Ankle bells · tap</i>
-          <p>Rows of brass bells tied on the ankles — every step of the footwork becomes sound.</p></figcaption>
-      </figure>
-
-    </div>
-  </div>
-</section>
-<div class="zari" aria-hidden="true"><svg preserveAspectRatio="none"><rect width="100%" height="100%" fill="url(#mangaiPat)"/></svg></div>
 
 <!-- ═══════════ TAAL DEMO ═══════════ -->
 <section class="s kolam" id="taal">
@@ -771,64 +643,6 @@ function tick(kind){
   function ring(){ jingle(); wrap.classList.remove('ring'); void wrap.offsetWidth; wrap.classList.add('ring'); track('ghungroo_ring'); }
   wrap.addEventListener('click', ring);
   wrap.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); ring(); } });
-})();
-
-/* aharya: costume pieces — fan pleats open, jhumkas swing, the belt glints, the salangai rings */
-(function(){
-  var NS='http://www.w3.org/2000/svg', sin=Math.sin, cos=Math.cos, rad=Math.PI/180;
-  function mk(tag, a, p){ var e=document.createElementNS(NS,tag); for(var k in a) e.setAttribute(k,a[k]); if(p) p.appendChild(e); return e; }
-  // fan: 11 pleats around a pivot at (120,22); the spread comes from CSS (--sp)
-  var pleats=document.querySelector('#pFan .pleats');
-  if(pleats){
-    var R=150, r=126, h=4.2*rad, cx=120, cy=22;
-    var X=function(rr,a){ return (cx+rr*sin(a)).toFixed(2); }, Y=function(rr,a){ return (cy+rr*cos(a)).toFixed(2); };
-    [-5,5,-4,4,-3,3,-2,2,-1,1,0].forEach(function(i){
-      var g=mk('g',{'class':'pleat',style:'--i:'+i},pleats);
-      mk('path',{d:'M'+cx+' '+cy+' L'+X(R,h)+' '+Y(R,h)+' A'+R+' '+R+' 0 0 0 '+X(R,-h)+' '+Y(R,-h)+' Z',fill:(Math.abs(i)%2?'url(#silkB)':'url(#silkA)'),stroke:'#F3C969','stroke-width':.6,'stroke-opacity':.55},g);
-      mk('path',{d:'M'+X(r,h)+' '+Y(r,h)+' L'+X(R,h)+' '+Y(R,h)+' A'+R+' '+R+' 0 0 0 '+X(R,-h)+' '+Y(R,-h)+' L'+X(r,-h)+' '+Y(r,-h)+' A'+r+' '+r+' 0 0 1 '+X(r,h)+' '+Y(r,h)+' Z',fill:'url(#goldG)'},g);
-      mk('circle',{cx:cx,cy:cy+138,r:2.2,fill:'#6B0F1A'},g);
-      mk('line',{x1:cx,y1:cy+20,x2:cx,y2:cy+r-2,stroke:'#F3C969','stroke-width':.7,'stroke-opacity':.35},g);
-    });
-  }
-  // belt: small kemp stones along the band, a lotus on the medallion, pearls below it
-  var belt=document.querySelector('#pBelt');
-  if(belt){
-    var st=belt.querySelector('.belt-stones'), lo=belt.querySelector('.belt-lotus'), pe=belt.querySelector('.belt-pearls');
-    for(var t=0.06;t<0.95;t+=0.075){ if(t>0.36&&t<0.64) continue; var x=8+224*t, y=(1-t)*(1-t)*83+2*(1-t)*t*105+t*t*83;
-      mk('rect',{x:x-3.6,y:y-3.6,width:7.2,height:7.2,transform:'rotate(45 '+x.toFixed(1)+' '+y.toFixed(1)+')',fill:(Math.round(t*100)%2?'#1E7F5C':'#C1121F'),stroke:'#F3C969','stroke-width':.8},st); }
-    for(var k=0;k<8;k++){ mk('path',{d:'M120 98 Q127 84 120 70 Q113 84 120 98 Z',fill:'#E8BE55',stroke:'#9C7420','stroke-width':.8,transform:'rotate('+(k*45)+' 120 98)'},lo); }
-    for(var j=0;j<12;j++){ var a=j*30*rad; mk('circle',{cx:(120+24*sin(a)).toFixed(1),cy:(98+27*cos(a)).toFixed(1),r:2.1,fill:'#FFF6E6'},lo); }
-    for(var q=-3;q<=3;q++){ var px=120+q*6.5, n=3-Math.abs(q)%2; for(var m=0;m<n;m++) mk('circle',{cx:px,cy:136+m*7,r:2.8,fill:'#FFF6E6',stroke:'#E2CFA8','stroke-width':.5},pe); }
-  }
-  // salangai: three rows of brass bells on the pad
-  var gb=document.querySelector('#pSalangai .gbells');
-  if(gb){
-    [[70,9,0],[92,8,8.75],[114,9,0]].forEach(function(row){
-      for(var i=0;i<row[1];i++){ var x=50+row[2]+i*17.5, y=row[0];
-        var g=mk('g',{'class':'gb'},gb); g.style.animationDelay=(-(i*0.13+row[0]/90))+'s';
-        mk('circle',{cx:x,cy:y,r:7.4,fill:'url(#bellG)',stroke:'#9C7420','stroke-width':.9},g);
-        mk('path',{d:'M'+(x-3.6)+' '+(y+2.2)+' h7.2',stroke:'#5A1A12','stroke-width':1.4,'stroke-linecap':'round'},g);
-        mk('circle',{cx:x-2.4,cy:y-2.6,r:1.6,fill:'#FFF6D6','fill-opacity':.9},g);
-      }
-    });
-  }
-  // open the fan and make the belt glint once they come into view
-  var fan=document.getElementById('pFan');
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ setTimeout(function(){ e.target.classList.add('open'); }, 350); io.unobserve(e.target); } }); }, {threshold:.45});
-    if(fan) io.observe(fan); if(belt) io.observe(belt);
-  } else { if(fan) fan.classList.add('open'); }
-  // taps and keys
-  document.querySelectorAll('.piece').forEach(function(p){
-    function act(){
-      track('costume_piece',{piece:p.getAttribute('data-piece')});
-      if(p.id==='pSalangai'){ jingle(); p.classList.remove('ring'); void p.offsetWidth; p.classList.add('ring'); }
-      if(p.id==='pBelt'){ p.classList.remove('shine'); void p.offsetWidth; p.classList.add('shine'); }
-      if(p.id==='pFan'){ p.classList.toggle('open'); }
-    }
-    p.addEventListener('click', act);
-    p.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); act(); } });
-  });
 })();
 
 /* Adi tala wheel */
